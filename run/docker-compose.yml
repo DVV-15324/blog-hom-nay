@@ -1,0 +1,47 @@
+version: "3.3"
+
+services:
+  backend:
+    image: vudinh2025/bloghomnay:latest
+    container_name: blog-backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - blog-network
+
+  frontend:
+    image: vudinh2025/bloghomnay-fe:latest
+    container_name: blog-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - blog-network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Passw0rd
+    ports:
+      - "1503:1433"  # máy thật truy cập qua 1503
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - blog-network
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong!Passw0rd", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  blog-network:
+    driver: bridge
+
+volumes:
+  sqlserver-data:
