@@ -1,13 +1,20 @@
 package comment
 
+<<<<<<< HEAD
 /*
+=======
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 import (
 	"bloghomnay-project/common"
 
 	"github.com/gin-gonic/gin"
 )
 
+<<<<<<< HEAD
 func (api *ApiComment) ApiGetComment() func(c *gin.Context) {
+=======
+func (api *ApiComment) ApiGetTags() func(c *gin.Context) {
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	return func(c *gin.Context) {
 		var id = c.Param("post-id")
 		uid := common.DecodeFromBase58(id)
@@ -23,4 +30,7 @@ func (api *ApiComment) ApiGetComment() func(c *gin.Context) {
 
 	}
 }
+<<<<<<< HEAD
 */
+=======
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8

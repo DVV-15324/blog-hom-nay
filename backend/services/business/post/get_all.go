@@ -13,6 +13,7 @@ func (c *BusinessPost) BusinessGetALLPost(ctx context.Context) ([]entityPosts.Po
 		app := common.NewAppError(404, http.StatusText(404), err)
 		return nil, app
 	}
+<<<<<<< HEAD
 	for i := 0; i < len(post); i++ {
 		//gắn tag
 		addTag, _ := c.bzTag.BusinessGetTagByPostId(ctx, post[i].Id)
@@ -43,4 +44,8 @@ func (c *BusinessPost) BusinessGetALLPost(ctx context.Context) ([]entityPosts.Po
 	}
 	return post, nil
 
+=======
+
+	return post, nil
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 }

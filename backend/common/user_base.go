@@ -12,6 +12,10 @@ type UserFormBase struct {
 }
 
 func (u *UserFormBase) Mask() {
+<<<<<<< HEAD
 	uid := NewUID(uint32(u.Id), 1).ToBase58()
+=======
+	uid := NewUID(uint32(u.Id), 11).ToBase58()
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	u.FakeId = uid
 }

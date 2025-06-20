@@ -9,6 +9,7 @@ import (
 // Lúc nhấn vào post
 func (p *PostServiceSQL) GetPostsByID(ctx context.Context, id int) (*entity.Posts, error) {
 	post := entity.Posts{}
+<<<<<<< HEAD
 	query := `
 		SELECT 
 		p.id, 
@@ -27,6 +28,10 @@ func (p *PostServiceSQL) GetPostsByID(ctx context.Context, id int) (*entity.Post
 		GROUP BY 
 			p.id, p.user_id, p.category_id, p.description, p.title, p.content, p.created_at;`
 	err := p.db.QueryRowContext(ctx, query, sql.Named("id", id)).Scan(&post.Id, &post.UserID, &post.CategoryId, &post.Description, &post.Title, &post.Content, &post.Like, &post.CountComment, &post.CreatedAt)
+=======
+	query := "SELECT id, user_id, category_id, title, content FROM posts where id = @id"
+	err := p.db.QueryRowContext(ctx, query, sql.Named("id", id)).Scan(&post.Id, &post.UserID, &post.CategoryId, &post.Title, &post.Content)
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	if err != nil {
 		return nil, err
 	}

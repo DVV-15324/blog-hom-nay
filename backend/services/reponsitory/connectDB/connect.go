@@ -2,6 +2,7 @@ package connectdb
 
 import (
 	"database/sql"
+<<<<<<< HEAD
 	"fmt"
 	"log"
 	"os"
@@ -34,5 +35,14 @@ func Connectdb() (*sql.DB, error) {
 		return nil, err
 	}
 
+=======
+)
+
+func Connectdb() (*sql.DB, error) {
+	db, err := sql.Open("sqlserver", "sqlserver://sa:123@localhost:1503?database=bloghomnay&connection+timeout=30")
+	if err != nil {
+		return nil, err
+	}
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	return db, nil
 }

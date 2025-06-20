@@ -2,6 +2,7 @@ package middleware
 
 import "github.com/gin-gonic/gin"
 
+<<<<<<< HEAD
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -16,5 +17,15 @@ func Cors() gin.HandlerFunc {
 		}
 
 		c.Next()
+=======
+func Cors() func(c *gin.Context) {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methors", "GET, POST, PUT, DELETE, PATCH")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Next()
+
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	}
 }

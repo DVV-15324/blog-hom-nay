@@ -3,10 +3,16 @@ package comment
 import "strings"
 
 type CreateComment struct {
+<<<<<<< HEAD
 	PostID     int    `json:"-"`
 	UserID     int    `json:"-"`
 	FakePostID string `json:"post_id"`
 	Content    string `json:"content"`
+=======
+	PostID  string `json:"-"`
+	UserID  string `json:"-"`
+	Content string `json:"content"`
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 }
 
 func (c *CreateComment) Validate() error {
@@ -19,10 +25,14 @@ func (c *CreateComment) Validate() error {
 }
 
 type UpdateComment struct {
+<<<<<<< HEAD
 	PostID     *int    `json:"-"`
 	UserID     *int    `json:"-"`
 	FakePostID *string `json:"post_id"`
 	Content    *string `json:"content"`
+=======
+	Content *string `json:"content"`
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 }
 
 func (c *UpdateComment) Validate() error {
