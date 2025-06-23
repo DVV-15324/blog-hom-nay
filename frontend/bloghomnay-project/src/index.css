@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
+
+.saira-font {
+  font-family: "Saira", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+@import "tailwindcss";
+
+.ql-editor h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.ql-editor h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 0.4em;
+}
+
+.ql-editor h3 {
+  font-size: 1em;
+  font-weight: bold;
+  margin-bottom: 0.3em;
+}
+
+.ql-align-center {
+  text-align: center;
+}
+
+
+
+
+html,
+body {
+  overflow-x: hidden;
+}

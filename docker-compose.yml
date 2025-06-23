@@ -1,0 +1,32 @@
+version: "3.3"
+
+services:
+  backend:
+    image: vudinh2025/bloghomnay:latest
+    container_name: blog-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=14.225.206.78
+      - DB_PORT=1503
+      - DB_USER=sa
+      - DB_PASSWORD=YourStrong!Passw0rd
+      - DB_NAME=bloghomnay
+    networks:
+      - blog-network
+
+  frontend:
+    image: vudinh2025/bloghomnay-fe:latest
+    container_name: blog-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://backend:3000
+    networks:
+      - blog-network
+
+networks:
+  blog-network:
+    external: true
