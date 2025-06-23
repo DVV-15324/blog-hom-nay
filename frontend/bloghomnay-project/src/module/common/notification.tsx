@@ -112,7 +112,7 @@ export default function NotificationMUI({ children }: notiMUIProps) {
                         <DefaultLoading />
                     </MenuItem>
                 ) : (
-                    noti.length > 0 ? (
+                    noti && noti.length > 0 ? (
                         noti.map((item, index) => (
                             <MenuItem
                                 key={index}
