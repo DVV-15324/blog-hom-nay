@@ -13,8 +13,8 @@ import ReactQuill, { Quill } from "react-quill-new";
 
 import "quill/dist/quill.snow.css";
 
-import ImageResize from 'quill-resize-image';
-Quill.register('modules/imageResize', ImageResize);
+
+
 
 import {
     UpdatePostType,
@@ -98,7 +98,7 @@ export default function UpdatePost() {
     const [content, setContent] = useState("");
     const quillRef = useRef<ReactQuill | null>(null);
 
-
+    const [defaultTagsByCategory, setDefaultTagsByCategory] = useState<Record<string, TagBase[]>>({});
     const insertImageToEditor = (url: string) => {
         const editor = quillRef.current?.getEditor();
         const range = editor?.getSelection();
@@ -118,7 +118,7 @@ export default function UpdatePost() {
                     ApiGetPostById<Response<PostResponse>>(id!)
                 ]);
 
-                setImage(imgRes.data);
+                setImage(imgRes.data || []);
                 setCategories(catRes.data);
                 setTags(tagRes.data);
 
@@ -131,7 +131,13 @@ export default function UpdatePost() {
                 setSelectedTags(post.tags);
                 setCategories(catRes.data);
 
+                const mapTagsByCategory: Record<string, TagBase[]> = {};
 
+                catRes.data.forEach((cat) => {
+                    mapTagsByCategory[cat.id] = tagRes.data.filter((tag) => tag.id === cat.tag_id);
+                });
+
+                setDefaultTagsByCategory(mapTagsByCategory);
 
                 setContent(post.content);
             } catch (error: any) {
@@ -147,7 +153,18 @@ export default function UpdatePost() {
 
     }, [categories]);
 
+    // Khi chọn category thì set selectedTags = tags mặc định category đó
+    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const catId = e.target.value;
+        setSelectedCategoryId(catId);
 
+        const defaultTags = defaultTagsByCategory[catId] || [];
+        setSelectedTags(defaultTags);
+    };
+
+    useEffect(() => {
+
+    }, [defaultTagsByCategory]);
 
     const handleUploadImg = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -252,20 +269,17 @@ export default function UpdatePost() {
                 </label>
                 <select
                     value={selectedCategoryId}
-                    onChange={(e) => setSelectedCategoryId(e.target.value)}
+                    onChange={handleCategoryChange}
                     className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-purple-600 sm:text-sm"
                 >
                     <option value="" disabled>
                         Chọn danh mục
                     </option>
-                    {categories.map((cat) => {
-                        return (
-                            <option key={cat.id} value={cat.id}>
-                                {cat.name}
-                            </option>
-                        );
-                    })}
-
+                    {categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                            {cat.name}
+                        </option>
+                    ))}
                 </select>
 
             </div>

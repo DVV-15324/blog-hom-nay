@@ -1,12 +1,17 @@
 import axios, { AxiosResponse } from "axios"
 import { LoginType, RegisterType } from "../model/auth"
 
+
+//'http://14.225.206.78:3000'
 export const axiosInstance = axios.create({
-    baseURL: "http://localhost:3000/"
+    baseURL: 'http://14.225.206.78:3000',
+
 })
+
+
 axiosInstance.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${localStorage.getItem("access_token")}`
-    console.log("Request headers Authorization:", config.headers.Authorization)
+
     return config
 })
 

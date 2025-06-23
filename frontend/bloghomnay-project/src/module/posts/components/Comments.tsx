@@ -56,7 +56,7 @@ export const CommentBox = ({ postId, initialComments = [] }: CommentBoxProps) =>
                         <div key={c.id} className="border-b py-2">
                             <div className="text-black flex items-center gap-2">
                                 <img
-                                    src={c.user?.avatar?.String || "/default-avatar.png"}
+                                    src={c.user?.avatar?.String || "/av.png"}
                                     alt={`${c.user?.first_name || ""} ${c.user?.last_name || ""}`}
                                     className="w-8 h-8 rounded-full object-contain"
                                 />

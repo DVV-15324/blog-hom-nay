@@ -33,12 +33,8 @@ func (p *Posts) TableName() string {
 
 func (p *Posts) Mask() {
 	uid := common.NewUID(uint32(p.Id), 3)
-<<<<<<< HEAD
 	p.Content = strings.ReplaceAll(p.Content, `\"`, `"`)
 	category_id := common.NewUID(uint32(p.CategoryId), 2)
-=======
-	category_id := common.NewUID(uint32(p.CategoryId), 1)
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	user_uid := common.NewUID(uint32(p.UserID), 1)
 	p.FakeId = uid.ToBase58()
 	p.FakeUserID = user_uid.ToBase58()

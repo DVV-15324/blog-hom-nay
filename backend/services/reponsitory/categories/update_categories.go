@@ -24,6 +24,7 @@ func (c *CategoriesServiceSQL) UpdateCategory(cxt context.Context, categories *e
 		placeholders = append(placeholders, "description=@description")
 		args = append(args, sql.Named("description", categories.Description))
 	}
+
 	query := fmt.Sprintf("UPDATE categories SET %s Where id = @id", strings.Join(placeholders, ","))
 	args = append(args, sql.Named("id", id))
 	_, err := c.db.ExecContext(cxt, query,

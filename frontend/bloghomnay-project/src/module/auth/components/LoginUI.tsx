@@ -15,16 +15,16 @@ export function LoginUI() {
     })
     const { handleSubmit, register, formState: { errors } } = methods;
     return (
-        <form className="flex flex-col bg-white p-12 rounded xl:w-xl md:w-base sm:w-sm lg:w-lg " onSubmit={handleSubmit(handleLogin)}>
-            <h1 className="text-5xl text-center font-bold saira-font mb-6">
+        <form className="flex flex-col bg-white p-6 xl:p-12 rounded sm:w-sm xl:w-xl md:w-md sm:w-sm lg:w-lg xs:w-xs" onSubmit={handleSubmit(handleLogin)}>
+            <h1 className="text-base md:text:xl lg:text-2xl xl:text-5xl text-center font-bold saira-font xl:mb-6">
                 Blog Hôm Nay
             </h1>
-            <div className="mb-4">
-                <label className="block mb-2" htmlFor="email">
+            <div className="xl:mb-4">
+                <label className="block xl:mb-2" htmlFor="email">
                     Email
                 </label>
                 <input
-                    className={`border rounded w-full px-3 py-2 ${errors.email ? "border-red-500" : "border-gray-300"
+                    className={`border rounded w-full px-1 py-1 xl:px-3 xl:py-2 ${errors.email ? "border-red-500" : "border-gray-300"
                         }`}
                     type="email"
                     id="email"
@@ -38,11 +38,11 @@ export function LoginUI() {
             </div>
 
             <div className="mb-6">
-                <label className="block mb-2" htmlFor="password">
+                <label className="block xl:mb-2" htmlFor="password">
                     Password
                 </label>
                 <input
-                    className={`border rounded w-full px-3 py-2 ${errors.password ? "border-red-500" : "border-gray-300"
+                    className={`border rounded w-full px-1 py-1 xl:px-3 xl:py-2 ${errors.password ? "border-red-500" : "border-gray-300"
                         }`}
                     type="password"
                     id="password"
@@ -55,7 +55,7 @@ export function LoginUI() {
 
             </div>
 
-            <button type="submit" className="bg-red-900 text-white px-4 py-2 rounded w-full">
+            <button type="submit" className="bg-red-900 text-white px-1 py-1 xl:px-4 xl:py-2 rounded w-full">
                 Login
             </button>
 

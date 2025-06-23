@@ -20,8 +20,8 @@ func (c *BusinessPost) BusinessGetPostByID(ctx context.Context, userId int, post
 		return nil, err_postLike
 	}
 	post.IsLike = isLike
-	//gắn tag
 	addTag, _ := c.bzTag.BusinessGetTagByPostId(ctx, post.Id)
+
 	listTag := []common.TagFormBase{}
 	for i := 0; i < len(addTag); i++ {
 		//convert tag

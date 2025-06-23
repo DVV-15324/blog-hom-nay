@@ -8,7 +8,7 @@ import {
     useRef,
     useEffect,
 } from "react";
-import ReactQuill from "react-quill-new";
+import ReactQuill, { Quill } from "react-quill-new";
 import "quill/dist/quill.snow.css";
 
 import {
@@ -30,9 +30,13 @@ import { AxiosError } from "axios";
 import { Categories } from "../../categories/module/categories";
 import { Response } from "../../auth/model/auth"
 
-
+import ImageResize from 'quill-resize-image';
+Quill.register('modules/imageResize', ImageResize);
 export default function CreatePost() {
     const [uploadedImages, setImage] = useState<ImgReponse[]>([]);
+    const [defaultTagsByCategory, setDefaultTagsByCategory] = useState<Record<string, TagBase[]>>({});
+
+
     const [title, setTitle] = useState("");
     const [selectedCategoryId, setSelectedCategoryId] = useState("");
     const [selectedTags, setSelectedTags] = useState<TagBase[]>([]);
@@ -59,10 +63,17 @@ export default function CreatePost() {
                     ApiGetAllCategories<Response<Categories[]>>(),
                     ApiGetAllTags<Response<TagBase[]>>(),
                 ]);
-                setImage(imgRes.data);
+                setImage(imgRes.data || []);
                 setCategories(catRes.data);
                 setTags(tagRes.data);
-                console.log(imgRes, catRes, tagRes)
+                const mapTagsByCategory: Record<string, TagBase[]> = {};
+
+                catRes.data.forEach((cat) => {
+                    mapTagsByCategory[cat.id] = tagRes.data.filter((tag) => tag.id === cat.tag_id);
+                });
+
+                setDefaultTagsByCategory(mapTagsByCategory);
+
             } catch (error) {
                 enqueueSnackbar("Lỗi tải dữ liệu", { variant: "error" });
             }
@@ -77,7 +88,6 @@ export default function CreatePost() {
         try {
             const nodeRes = await ApiNodeCreateImg<{ img: string }>(file);
             const imageUrl = nodeRes.img;
-            console.log(imageUrl)
             await ApiGoCreateImg({ img: imageUrl });
             setImage((prev) => [...prev, { img: imageUrl }]);
             enqueueSnackbar("Tải ảnh thành công!", { variant: "success" });
@@ -89,24 +99,46 @@ export default function CreatePost() {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        // Kiểm tra các trường bắt buộc
+        if (!title.trim()) {
+            enqueueSnackbar("Vui lòng nhập tiêu đề!", { variant: "warning" });
+            return;
+        }
+        if (!selectedCategoryId) {
+            enqueueSnackbar("Vui lòng chọn danh mục!", { variant: "warning" });
+            return;
+        }
+        if (!description.trim()) {
+            enqueueSnackbar("Vui lòng nhập miêu tả!", { variant: "warning" });
+            return;
+        }
+        if (!content.trim()) {
+            enqueueSnackbar("Vui lòng nhập nội dung!", { variant: "warning" });
+            return;
+        }
+        if (selectedTags.length === 0) {
+            enqueueSnackbar("Vui lòng chọn ít nhất một tag!", { variant: "warning" });
+            return;
+        }
+
         const newBlog: CreatePostType = {
             title,
             categories_id: selectedCategoryId,
             description,
             content,
             tags: selectedTags,
-
         };
-        try {
-            console.log(newBlog)
-            await ApiCreatePost<CreatePostType>(newBlog);
 
+        try {
+            await ApiCreatePost<CreatePostType>(newBlog);
             enqueueSnackbar("Tạo Post thành công!", { variant: "success" });
         } catch (error) {
             const err = error as AxiosError;
-            enqueueSnackbar(err.message || "Lỗi tải ảnh", { variant: "error" });
+            enqueueSnackbar(err.message || "Lỗi tạo bài viết", { variant: "error" });
         }
     };
+
 
     const modules = {
         toolbar: [
@@ -119,10 +151,10 @@ export default function CreatePost() {
             ["clean"],
 
         ],
-        resizeImage: {
+        imageResize: {
             displaySize: true,
             modules: ['Resize', 'DisplaySize'],
-        }
+        },
     };
     const formats = [
         "header",
@@ -139,6 +171,18 @@ export default function CreatePost() {
         "color",
         "align",
     ];
+    // Khi chọn category thì set selectedTags = tags mặc định category đó
+    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const catId = e.target.value;
+        setSelectedCategoryId(catId);
+
+        const defaultTags = defaultTagsByCategory[catId] || [];
+        setSelectedTags(defaultTags);
+    };
+
+    useEffect(() => {
+
+    }, [defaultTagsByCategory]);
 
     return (
         <div className="flex h-full w-full flex-col items-center justify-center">
@@ -184,7 +228,7 @@ export default function CreatePost() {
                 </label>
                 <select
                     value={selectedCategoryId}
-                    onChange={(e) => setSelectedCategoryId(e.target.value)}
+                    onChange={handleCategoryChange}
                     className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-purple-600 sm:text-sm"
                 >
                     <option value="" disabled>
@@ -202,13 +246,21 @@ export default function CreatePost() {
                 <label className="block mb-2 text-sm font-medium text-gray-900">Tags</label>
                 <div className="flex flex-wrap gap-3">
                     {tags.map((tag) => {
+
+                        // Nếu tag là mặc định của category thì disable checkbox để không thể xóa
+                        const isDefaultTag = defaultTagsByCategory[selectedCategoryId]?.some((t) => t.id === tag.id);
                         const isChecked = selectedTags.some((t) => t.id === tag.id);
 
                         return (
-                            <label key={tag.id} className="flex items-center space-x-2 cursor-pointer border px-3 py-1 rounded-md hover:bg-gray-100">
+                            <label
+                                key={tag.id}
+                                className={`flex items-center space-x-2 cursor-pointer border px-3 py-1 rounded-md hover:bg-gray-100 ${isDefaultTag ? "bg-gray-200" : ""
+                                    }`}
+                            >
                                 <input
                                     type="checkbox"
                                     checked={isChecked}
+                                    disabled={isDefaultTag} // không cho bỏ chọn tag mặc định
                                     onChange={(e) => {
                                         if (e.target.checked) {
                                             setSelectedTags((prev) => [...prev, tag]);

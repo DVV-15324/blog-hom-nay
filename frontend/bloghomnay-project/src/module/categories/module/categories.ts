@@ -3,4 +3,5 @@ export type Categories = {
     name: string;
     description: string;
     img: string;
+    tag_id: string;
 }

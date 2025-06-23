@@ -52,6 +52,7 @@ const PostsDetail = () => {
             if (!id) return;
             const res = await ApiGetPostById<Response<PostResponse>>(id);
             setPosts(res.data);
+            console.log(res.data)
         } catch (error) {
             const err = ErrorHandle(error as AxiosError);
             enqueueSnackbar(err.message, { variant: "error" });
@@ -85,13 +86,14 @@ const PostsDetail = () => {
         <div className=" grid xl:grid-cols-5 h-full w-full gap-4 px-4 py-10">
             {/* Sidebar trái cố định */}
             <aside className="xl:col-span-1 hidden xl:block">
-                <div className="fixed flex flex-col top-24 left-0 w-1/5 flex flex-col items-end gap-4 xl:mt-20 " >
-                    <img
-                        src={user?.avatar.String}
-                        alt={user?.first_name}
-                        className="flex w-20 h-20 rounded-full object-cover shadow justify-center items-center cursor-pointer object-contain" onClick={handleProfileOthers}
-                    />
-                    <div className="text-center">
+                <div className="fixed flex flex-col top-24 left-0 w-1/5 flex flex-col items-end gap-4 xl:mt-20" >
+                    <div className="flex justify-center items-center flex-col">
+                        <img
+                            src={user?.avatar.String || "/av.png"}
+                            alt={user?.first_name}
+                            className="flex w-20 h-20 rounded-full shadow justify-center items-center cursor-pointer object-contain mb-2" onClick={handleProfileOthers}
+                        />
+
                         <h2 className="text-xl font-semibold text-gray-800 cursor-pointer" onClick={handleProfileOthers}>
                             {user?.first_name} {user?.last_name}
                         </h2>
@@ -111,6 +113,8 @@ const PostsDetail = () => {
                         )
                         }
                     </div>
+
+
                 </div>
             </aside>
             <div className="col-span-3 bg-stone-50 rounded text-white items-center justify-center">
@@ -143,7 +147,7 @@ const PostsDetail = () => {
             <div className="fixed bottom-0 left-0 w-full xl:hidden bg-white border-t p-4 shadow z-50">
                 <div className="flex flex-raw  items-center justify-center gap-2">
                     <img
-                        src={user?.avatar.String}
+                        src={user?.avatar.String || "/av.png"}
                         alt={user?.first_name}
                         className="w-10 h-10 rounded-full object-contain shadow"
                     />
@@ -154,14 +158,14 @@ const PostsDetail = () => {
                     </div>
                     <div className="text-center">
                         <div className="flex justify-center items-center">
-                            <HeartUI isLike={posts.islike} postId={posts.id} onLikeChange={(liked) => {
+                            <HeartUI width={30} height={30} isLike={posts.islike} postId={posts.id} onLikeChange={(liked) => {
                                 setLikeCount((prev) => liked ? prev + 1 : prev - 1);
                             }} />
                         </div>
                     </div>
                     <div className="text-sm text-gray-500 mt-1">{likeCount} lượt thích</div>
                     {created_at && (
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-gray-500 mt-1">
                             Ngày tạo: {new Date(created_at).toLocaleDateString()}
                         </div>
                     )}

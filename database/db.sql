@@ -24,22 +24,29 @@ CREATE TABLE auths (
     user_id INT NOT NULL,
     password NVARCHAR(255) NOT NULL,
     salt NVARCHAR(255) NOT NULL,
-	auth_type NVARCHAR(50) NOT NULL DEFAULT 'local',
+	type_auth NVARCHAR(50) NOT NULL DEFAULT 'local',
     deleted_at DATETIME DEFAULT GETDATE(),
     created_at DATETIME DEFAULT GETDATE(),
     updated_at DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 GO
+CREATE TABLE tags (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    name NVARCHAR(255) UNIQUE NOT NULL,
 
+);
+GO
 CREATE TABLE categories (
     id INT IDENTITY(1,1) PRIMARY KEY,
     name NVARCHAR(255) NOT NULL UNIQUE,
     img NVARCHAR(255) NOT NULL UNIQUE,
     description NVARCHAR(MAX),
+    tag_id INT NOT NULL UNIQUE,
     updated_at DATETIME DEFAULT GETDATE(),
     created_at DATETIME DEFAULT GETDATE(),
-    deleted_at DATETIME DEFAULT GETDATE()
+    deleted_at DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (tag_id) REFERENCES tags(id) 
 );
 GO
 
@@ -58,11 +65,7 @@ CREATE TABLE posts (
 );
 GO
 
-CREATE TABLE tags (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    name NVARCHAR(255) UNIQUE NOT NULL
-);
-GO
+
 
 CREATE TABLE post_tags (
     id INT IDENTITY(1,1) PRIMARY KEY,

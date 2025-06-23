@@ -48,7 +48,7 @@ export const ProfileUI = () => {
 
     // Load CSV 1 lần lúc mount
     useEffect(() => {
-        fetch("/data/address.csv")
+        fetch("./data/address.csv")
             .then((res) => res.text())
             .then((csvText) => {
                 Papa.parse<AddressRow>(csvText, {
@@ -267,7 +267,7 @@ export const ProfileUI = () => {
 
             <div className="flex items-center gap-4 justify-center relative w-20 h-20 mx-auto">
                 <img
-                    src={avatarPreview || "/default-avatar.png"}
+                    src={avatarPreview || "/av.png"}
                     alt="avatar"
                     className="w-20 h-20 rounded-full object-contain ring-2 ring-blue-500 cursor-pointer"
                     onClick={() => fileInputRef.current?.click()}

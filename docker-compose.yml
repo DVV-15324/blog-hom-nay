@@ -1,46 +1,32 @@
-version: "3.8"
+version: "3.3"
+
 services:
   backend:
-    build:
-      context: ./backend
+    image: vudinh2025/bloghomnay:latest
+    container_name: blog-backend
     ports:
       - "3000:3000"
-    depends_on:
-      - db
+    environment:
+      - DB_HOST=14.225.206.78
+      - DB_PORT=1503
+      - DB_USER=sa
+      - DB_PASSWORD=YourStrong!Passw0rd
+      - DB_NAME=bloghomnay
     networks:
       - blog-network
 
   frontend:
-    build:
-      context: ./frontend/bloghomnay-project/
+    image: vudinh2025/bloghomnay-fe:latest
+    container_name: blog-frontend
     ports:
       - "80:80"
     depends_on:
       - backend
-    networks:
-      - blog-network
-
-  db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=YourStrong!Passw0rd
-    ports:
-      - "1503:1433"
-    volumes:
-      - sqlserver-data:/var/opt/mssql    
+      - VITE_API_URL=http://backend:3000
     networks:
       - blog-network
-    healthcheck:
-      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong!Passw0rd", "-Q", "SELECT 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 networks:
   blog-network:
-    driver: bridge
-
-volumes:
-  sqlserver-data:     
+    external: true

@@ -8,7 +8,6 @@ import (
 
 // Lọc post qua Categories
 func (p *PostServiceSQL) GetPostByCategories(ctx context.Context, categoryID int) ([]entity.Posts, error) {
-<<<<<<< HEAD
 	query := `SELECT 
 		p.id, 
 		p.user_id, 
@@ -26,10 +25,6 @@ func (p *PostServiceSQL) GetPostByCategories(ctx context.Context, categoryID int
 			p.id, p.user_id, p.category_id, p.description, p.title, p.content;`
 	rows, err := p.db.QueryContext(ctx, query, sql.Named("category_id", categoryID))
 
-=======
-	query := "SELECT id, user_id, category_id, title, content FROM posts where category_id = @category_id"
-	rows, err := p.db.QueryContext(ctx, query, sql.Named("category_id", categoryID))
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	if err != nil {
 		return nil, err
 	}
@@ -38,11 +33,7 @@ func (p *PostServiceSQL) GetPostByCategories(ctx context.Context, categoryID int
 	var listPosts []entity.Posts
 	for rows.Next() {
 		var data entity.Posts
-<<<<<<< HEAD
 		if err := rows.Scan(&data.Id, &data.UserID, &data.CategoryId, &data.Description, &data.Title, &data.Content, &data.Like, &data.CountComment); err != nil {
-=======
-		if err := rows.Scan(&data.Id, &data.UserID, &data.CategoryId, &data.Title, &data.Content); err != nil {
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 			return nil, err
 		}
 		listPosts = append(listPosts, data)

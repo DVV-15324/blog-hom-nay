@@ -5,6 +5,8 @@ import { useHookAuth } from "../auth/hooks/authHooks";
 import { useNavigate } from "react-router-dom";
 import MenuMUI from "./Menu";
 import ISearchComponent from "./SearchComponent";
+import NotificationMUI from "./notification";
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
 interface HeaderMainProps {
     children: React.ReactNode
@@ -17,22 +19,54 @@ const HeaderMain = ({ children }: HeaderMainProps) => {
     const navigate = useNavigate();
     return (
         <div className="flex rtl">
-            <Sidebar className="h-[90px]" rtl onBackdropClick={() => setToggled(false)} toggled={toggled} breakPoint="all">
+            <Sidebar
+                backgroundColor="#ffffff"
+                className="h-[90px]"
+                rtl
+                onBackdropClick={() => setToggled(false)}
+                toggled={toggled}
+                breakPoint="all"
+            >
                 <Menu>
-                    <MenuItem>
+
+                    <div className="flex items-center justify-center flex-col gap-3 my-10">
                         <img
-                            src={useHookAuth().profile?.avatar.String}
+                            src={useHookAuth().profile?.avatar.String || "/av.png"}
                             alt="avatar"
-                            className="m-2 w-12 h-12 rounded-xl object-contain"
+                            className="w-20 h-20 rounded-xl object-contain"
                         />
+                        <div className="font-bold text-xl">{`${profile?.first_name || ""} ${profile?.last_name || ""}`}</div>
+                    </div>
+
+
+                    <MenuItem
+                        className="text-center hover:bg-gray-300 bg-gray-200 cursor-pointer rounded-sm text-xl text-green-900 underline"
+                        onClick={() => {
+                            window.location.href = "/";
+                        }}
+                    >
+                        Trang chủ
+                    </MenuItem>
+                    <MenuItem
+                        className="text-center hover:bg-gray-300 bg-gray-200 cursor-pointer rounded-sm text-xl text-green-900 underline"
+                        onClick={() => {
+                            navigate(`/user/${profile?.id!}`);
+                        }}
+                    >
+                        Blog của bạn
                     </MenuItem>
 
-                    <MenuItem> Trang chủ</MenuItem>
-                    <MenuItem> Blog của bạn</MenuItem>
-                    <MenuItem>Thông báo</MenuItem>
-
+                    <MenuItem
+                        className="text-center hover:bg-gray-300 bg-gray-200 cursor-pointer rounded-sm text-xl text-green-900 underline"
+                        onClick={() => {
+                            navigate("/create_post");
+                        }}
+                    >
+                        Tạo Post
+                    </MenuItem>
                 </Menu>
             </Sidebar>
+
             <main className="flex flex-col w-screen min-h-screen">
 
                 <div className="flex fixed top-0 h-[90px] w-full items-center px-4 z-50 border-b border-gray-300 bg-white">
@@ -41,13 +75,13 @@ const HeaderMain = ({ children }: HeaderMainProps) => {
                         <img src="/logo.png" alt="logo" className="w-12 " onClick={() => {
                             window.location.href = "/";
                         }} />
-                        <h1 className="select-none hidden md:block text-xl text-black saira-font text-lg" onClick={() => {
+                        <h1 className="select-none hidden md:block text-xl text-black saira-font text-lg " onClick={() => {
                             window.location.href = "/";
                         }}>Blog Hom Nay</h1>
 
                     </div>
                     {/*https://www.material-tailwind.com/docs/html/input-search*/}
-                    <div className="flex flex-2 xl:flex-1 text-black justify-center w-full">
+                    <div className="flex flex-3 xl:flex-1 text-black justify-center w-full">
                         <div className="w-full">
                             <div className="relative">
                                 <ISearchComponent />
@@ -64,7 +98,12 @@ const HeaderMain = ({ children }: HeaderMainProps) => {
                         <a className="hidden xl:block p-3 m-2 hover:bg-gray-300 bg-gray-200 cursor-pointer rounded-sm  text-xl  text-green-900 underline" onClick={() => {
                             navigate(`/user/${profile?.id!}`);
                         }}>Blog của bạn</a>
-                        <a className="hidden xl:block p-3 m-2 hover:bg-gray-300 bg-gray-200 cursor-pointer rounded-sm  text-xl  text-green-900 underline">Thông báo</a>
+
+                        <NotificationMUI>
+                            <div className="hidden xl:block p-4 m-2 hover:bg-gray-300 bg-gray-200 cursor-pointer rounded-sm text-xl text-green-900 underline">Thông báo</div>
+                        </NotificationMUI>
+                        <div></div>
+
                         <a
                             className="hidden xl:block p-3 m-2 hover:bg-gray-300 bg-gray-200 cursor-pointer rounded-sm text-xl text-green-900 underline"
                             onClick={() => {
@@ -73,23 +112,45 @@ const HeaderMain = ({ children }: HeaderMainProps) => {
                         >
                             Tạo Post
                         </a>
-                        <div>
+
+                        {profile ?
                             <MenuMUI>
                                 <img
                                     alt="avatar"
-                                    className="hidden xl:block m-2 w-12 h-12 rounded-full cursor-pointer object-contain"
+                                    className="hidden xl:block m-2 w-12 h-12 rounded-full cursor-pointer  object-contain"
                                     src={profile?.avatar.String || "/av.png"}
 
                                 />
-                            </MenuMUI>
+                            </MenuMUI> : <a
+                                className="hidden xl:block p-3 m-2 hover:bg-gray-200 hover:text-black bg-red-900 cursor-pointer rounded-sm text-xl text-white"
+                                onClick={() => {
+                                    navigate('/login');
+                                }}
+                            >
+                                Đăng nhập
+                            </a>
+                        }
+                        {profile
+                            ? <div className="xl:hidden flex items-center justify-end fixed right-3 z-50 gap-2">
+                                <NotificationMUI>
+                                    <NotificationsNoneIcon className="text-black cursor-pointer" />
+                                </NotificationMUI>
+                                <button className="sb-button" onClick={() => setToggled(!toggled)}>
+                                    <MenuIcon className="text-black" />
+                                </button>
+                            </div> : <div className="w-full xl:hidden">
+                                <a
+                                    className="block p-1 m-1 hover:bg-gray-200 hover:text-black bg-red-900 cursor-pointer rounded-sm text-xs text-white text-center"
+                                    onClick={() => {
+                                        navigate('/login');
+                                    }}
+                                >
+                                    Đăng nhập
+                                </a>
+                            </div>
+                        }
 
-                        </div>
 
-                        <div className="xl:hidden flex flex-1 fixed top-1 right-1 z-50">
-                            <button className="sb-button flex justify-end" onClick={() => setToggled(!toggled)}>
-                                <MenuIcon />
-                            </button>
-                        </div>
                     </div>
                 </div>
 

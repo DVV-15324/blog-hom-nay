@@ -12,14 +12,14 @@ export function RegisterUI() {
     const { handleSubmit, register, formState: { errors } } = methods
     return (
         <form onSubmit={handleSubmit(handleRegister)}
-            className="bg-white p-12 rounded xl:w-xl md:w-base sm:w-sm lg:w-lg"
+            className="flex flex-col bg-white p-6 xl:p-12 rounded sm:w-sm xl:w-xl md:w-md sm:w-sm lg:w-lg xs:w-xs"
         >
-            <h1 className="text-5xl text-center font-bold saira-font">Blog Hôm Nay</h1>
+            <h1 className="text-base md:text-xl lg:text-2xl xl:text-5xl text-center font-bold saira-font xl:mb-6">Blog Hôm Nay</h1>
 
-            <div className="mb-4">
-                <label className="block mb-2" htmlFor="first_name">First Name</label>
+            <div className="xl:mb-4">
+                <label className="block xl:mb-2" htmlFor="first_name">First Name</label>
                 <input
-                    className={`border rounded w-full px-3 py-2 ${errors.first_name ? "border-gray-300" : "border-red-900"}`}
+                    className={`border rounded w-full p-1 xl:px-3 xl:py-2 ${errors.first_name ? "border-gray-300" : "border-red-900"}`}
                     type="text"
                     id="first_name"
                     placeholder="First Name"
@@ -30,10 +30,10 @@ export function RegisterUI() {
                 }
             </div>
 
-            <div className="mb-4">
+            <div className="xl:mb-4">
                 <label className="block mb-2" htmlFor="last_name">Last Name</label>
                 <input
-                    className={`border rounded w-full px-3 py-2 ${errors.last_name ? "boder-red-900" : "border-gray-300"}`}
+                    className={`border rounded w-full p-1 xl:px-3 xl:py-2 ${errors.last_name ? "boder-red-900" : "border-gray-300"}`}
                     type="text"
                     id="last_name"
                     placeholder="Last Name"
@@ -44,10 +44,10 @@ export function RegisterUI() {
                 }
             </div>
 
-            <div className="mb-4">
-                <label className="block mb-2" htmlFor="phone">Phone</label>
+            <div className="xl:mb-4">
+                <label className="block xl:mb-2" htmlFor="phone">Phone</label>
                 <input
-                    className={`border rounded w-full px-3 py-2 ${errors.phone ? "boder-red-900" : "border-gray-300"}`}
+                    className={`border rounded w-full p-1 xl:px-3 xl:py-2 ${errors.phone ? "boder-red-900" : "border-gray-300"}`}
                     type="text"
                     id="phone"
                     placeholder="Phone"
@@ -58,7 +58,7 @@ export function RegisterUI() {
                 }
             </div>
 
-            <div className="mb-4">
+            <div className="xl:mb-4">
                 <label className="block   mb-2" htmlFor="email">Email</label>
                 <input
                     className={`border rounded w-full px-3 py-2 ${errors.email ? "boder-red-900" : "border-gray-300"}`}
@@ -89,7 +89,7 @@ export function RegisterUI() {
 
             <button
                 type="submit"
-                className="bg-red-900 text-white px-4 py-2 rounded w-full"
+                className="bg-red-900 text-white p-1 xl:px-4 xl:py-2 rounded w-full"
             >
                 Register
             </button>

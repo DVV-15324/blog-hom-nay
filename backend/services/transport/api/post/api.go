@@ -11,20 +11,12 @@ type BusinessPosts interface {
 	BusinessDeletePost(ctx context.Context, id int) *common.AppError
 	BusinessGetALLPost(ctx context.Context) ([]entityPosts.Posts, *common.AppError)
 	BusinessGetPostByCategories(ctx context.Context, categoriesID int) ([]entityPosts.Posts, *common.AppError)
-<<<<<<< HEAD
 	BusinessGetPostByID(ctx context.Context, userId int, postId int) (*entityPosts.Posts, *common.AppError)
 	//BusinessGetPostByTag(ctx context.Context, tagId []int) ([]entityPosts.Posts, *common.AppError)
 	//BusinessGetPostByTitles(ctx context.Context, title string) ([]entityPosts.Posts, *common.AppError)
 	BusinessGetPostByUserId(ctx context.Context, id int) ([]entityPosts.Posts, *common.AppError)
 	BusinessUpdatePostByID(ctx context.Context, data *entityPosts.UpdatePost, postId int) *common.AppError
 	BussinessSearchPost(ctx context.Context, search string) ([]entityPosts.Posts, *common.AppError)
-=======
-	BusinessGetPostByID(ctx context.Context, id int) (*entityPosts.Posts, *common.AppError)
-	BusinessGetPostByTag(ctx context.Context, tagId []int) ([]entityPosts.Posts, *common.AppError)
-	BusinessGetPostByTitles(ctx context.Context, title string) ([]entityPosts.Posts, *common.AppError)
-	BusinessGetPostByUserId(ctx context.Context, id int) ([]entityPosts.Posts, *common.AppError)
-	BusinessUpdatePostByID(ctx context.Context, data *entityPosts.UpdatePost, postId int) *common.AppError
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 }
 type ApiPosts struct {
 	bz BusinessPosts

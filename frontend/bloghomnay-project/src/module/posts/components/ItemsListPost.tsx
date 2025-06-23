@@ -8,7 +8,6 @@ type Props = {
 const ListPost: React.FC<Props> = ({ posts }) => {
     const safePosts = posts || [];
 
-    console.log("Posts length:", safePosts.length);
 
     if (safePosts.length < 1) {
         return <p className="text-center text-gray-500 mt-10">Không có bài viết nào.</p>;

@@ -56,22 +56,24 @@ export const OverViewPostUI = () => {
         <div className="xl:grid xl:grid-cols-5 h-full w-full gap-4 px-4 py-10">
             <div></div>
 
-            <div className="col-span-3 bg-stone-50 rounded text-white items-center justify-center">
-                <div className="flex gap-4 mb-4 items-center justify-start border-b border-gray-300">
+            <div className="col-span-3 bg-stone-50 rounded text-white items-center justify-center p-6">
+                <div className="flex flex-col xl:flex-row gap-6 mb-6 items-center justify-start border-b border-gray-300 pb-6">
                     <img
-                        src={profile?.avatar.String}
+                        src={profile?.avatar.String || "/av.png"}
                         alt={profile?.first_name}
-                        className="w-50 h-50 rounded-full object-contain mb-5 mr-2 "
+                        className="w-24 h-24 xl:w-32 xl:h-32 rounded-full object-cover"
                     />
-                    <div>
-                        <div className="font-medium text-black text-xl">Họ và tên: {profile?.first_name} {profile?.last_name}</div>
-                        <div className="font-medium text-black text-xl">Email: {profile?.email}</div>
-                        <div className="font-medium text-black text-xl">Số điện thoại: {profile?.phone}</div>
-                        <div className="font-medium text-black text-xl">Địa chỉ: {profile?.address.String || "---"}</div>
+                    <div className="text-black space-y-2 text-center xl:text-left">
+                        <div className="font-medium sm:text-sm md:text-md xl:text-xl">Họ và tên: {profile?.first_name} {profile?.last_name}</div>
+                        <div className="font-medium sm:text-sm md:text-md xl:text-xl">Email: {profile?.email}</div>
+                        <div className="font-medium sm:text-sm md:text-md xl:text-xl">Số điện thoại: {profile?.phone}</div>
+                        <div className="font-medium sm:text-sm md:text-md xl:text-xl">Địa chỉ: {profile?.address.String || "---"}</div>
                     </div>
                 </div>
+
                 {loading ? <DefaultLoading /> : <OverViewListPost posts={posts} />}
             </div>
+
 
             <div></div>
         </div>

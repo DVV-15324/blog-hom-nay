@@ -46,21 +46,15 @@ type UpdatePost struct {
 func (u *UpdatePost) Validate() error {
 	*u.Title = strings.TrimSpace(*u.Title)
 	*u.Content = strings.TrimSpace(*u.Content)
-<<<<<<< HEAD
 	*u.Description = strings.TrimSpace(*u.Description)
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	err_content := CheckContent(*u.Content)
 	if err_content != nil {
 		return err_content
 	}
-<<<<<<< HEAD
 	err_description := CheckDescription(*u.Description)
 	if err_description != nil {
 		return err_description
 	}
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	err_title := CheckTile(*u.Title)
 	if err_title != nil {
 		return err_title

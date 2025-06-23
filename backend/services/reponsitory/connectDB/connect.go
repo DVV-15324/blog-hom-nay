@@ -2,7 +2,6 @@ package connectdb
 
 import (
 	"database/sql"
-<<<<<<< HEAD
 	"fmt"
 	"log"
 	"os"
@@ -24,25 +23,22 @@ func Connectdb() (*sql.DB, error) {
 	dbname := os.Getenv("DB_NAME")
 
 	if host == "" || port == "" || user == "" || password == "" || dbname == "" {
-		return nil, fmt.Errorf("missing one or more required DB environment variables")
+		log.Fatal("Missing one or more required DB environment variables")
 	}
 
-	// Chuẩn connection string của go-mssqldb driver
-	connString := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s", user, password, host, port, dbname)
+	connString := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", user, password, host, port, dbname)
+	fmt.Println(">>> Đang kết nối DB với:", connString)
 
 	db, err := sql.Open("sqlserver", connString)
 	if err != nil {
-		return nil, err
+		log.Fatalf("Lỗi kết nối DB: %v", err)
 	}
 
-=======
-)
-
-func Connectdb() (*sql.DB, error) {
-	db, err := sql.Open("sqlserver", "sqlserver://sa:123@localhost:1503?database=bloghomnay&connection+timeout=30")
+	err = db.Ping()
 	if err != nil {
-		return nil, err
+		log.Fatalf("Không thể ping DB: %v", err)
 	}
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
+
+	fmt.Println("Kết nối database thành công!")
 	return db, nil
 }

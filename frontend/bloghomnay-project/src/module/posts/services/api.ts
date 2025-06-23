@@ -49,7 +49,6 @@ export const ApiCreatePost = async <T>(data: CreatePostType): Promise<T> => {
 
 export const ApiUpdatePost = async <T>(data: { data: UpdatePostType, id: string }): Promise<T> => {
     const response = await axiosInstance.post<T>(`/v2/post/update_post_id/${data.id}`, data.data)
-    console.log(data.data)
     return response.data
 }
 export const ApiGetImg = async <T>(): Promise<T> => {
@@ -86,5 +85,10 @@ export const ApiGetAllCategories = async <T>(): Promise<T> => {
 }
 export const ApiGetAllTags = async <T>(): Promise<T> => {
     const response: AxiosResponse<T> = await axiosInstance.post("/v1/tag/get_all_tag")
+    return response.data
+}
+
+export const ApiGetNotification = async <T>(): Promise<T> => {
+    const response: AxiosResponse<T> = await axiosInstance.post(`/v2/comment/get_notication`)
     return response.data
 }

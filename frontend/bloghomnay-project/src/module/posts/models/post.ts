@@ -68,4 +68,16 @@ export interface ImgReponse {
     img: string;
 }
 
-
+export interface PostBase {
+    id: string,
+    title: string,
+    user: UserBase,
+}
+export interface Notification {
+    id: string,
+    post_id: string,
+    user_id: string,
+    content: string,
+    user: UserBase,
+    post: PostBase,
+}

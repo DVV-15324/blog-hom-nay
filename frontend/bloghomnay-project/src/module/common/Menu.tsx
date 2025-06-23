@@ -23,7 +23,7 @@ export default function MenuMUI({ children }: MunuMUIProps) {
     const { handleOut } = useHookAuth();
     const navigate = useNavigate();
     return (
-        <div>
+        <div className='hidden xl:flex'>
             <Button
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}

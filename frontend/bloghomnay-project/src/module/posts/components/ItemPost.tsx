@@ -21,7 +21,7 @@ const ItemPost: React.FC<Props> = ({ post }) => {
         }}>
             <div className="flex items-center gap-4 mb-4" onClick={handleProfileOthers}>
                 <img
-                    src={post.user.avatar.String}
+                    src={post.user.avatar.String || "/av.png"}
                     alt={post.user.first_name}
                     className="w-10 h-10 rounded-full object-contain"
                 />

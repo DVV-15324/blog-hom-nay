@@ -2,11 +2,7 @@ package post
 
 import (
 	"bloghomnay-project/common"
-<<<<<<< HEAD
 	entityComment "bloghomnay-project/services/entity/comment"
-=======
-	//entityCategories "bloghomnay-project/services/entity/categories"
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	entityPost "bloghomnay-project/services/entity/posts"
 	entityTag "bloghomnay-project/services/entity/tag"
 	entityUser "bloghomnay-project/services/entity/user"
