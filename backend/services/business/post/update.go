@@ -16,11 +16,7 @@ func (c *BusinessPost) BusinessUpdatePostByID(ctx context.Context, data *entityP
 	}
 	addTag, removetag := filterTags(post.Tag, data.Tag)
 	for _, tag := range addTag {
-<<<<<<< HEAD
 		if err := c.bzPostTag.CreatePostTag(ctx, postId, tag.Id); err != nil {
-=======
-		if err := c.bzPostTag.UpdatePostTags(ctx, postId, tag.Id); err != nil {
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 			return common.NewAppError(500, http.StatusText(500), err)
 		}
 	}

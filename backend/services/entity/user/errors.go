@@ -8,11 +8,7 @@ var (
 
 	//Kiểm tra valid
 
-<<<<<<< HEAD
 	ErrorEmailNotValid     = errors.New("email không hợp lệ")
-=======
-	ErrorEmailNotValid     = errors.New("email khong hop le")
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	ErrorFirstNameNotValid = errors.New("lirstName tối thiểu 2 kí tự và nhỏ hơn 20 kí tự")
 	ErrorLastNameNotValid  = errors.New("lastname tối thiểu 2 kí tự và nhỏ hơn 20 kí tự")
 	ErrorPhoneNotValid     = errors.New("số điện thoại không hợp lệ")

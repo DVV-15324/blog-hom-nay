@@ -18,7 +18,6 @@ type ResponsitoryPost interface {
 	DeletePostById(cxt context.Context, id int) error
 	GetPostByCategories(ctx context.Context, categoryID int) ([]entityPost.Posts, error)
 	GetPostsByID(ctx context.Context, id int) (*entityPost.Posts, error)
-<<<<<<< HEAD
 	//GetsPostByTagsID(ctx context.Context, tagID []int) ([]entityPost.Posts, error)
 	GetPostByTitles(ctx context.Context, title string) ([]entityPost.Posts, error)
 	GetsPostByTagsName(ctx context.Context, tagName []string) ([]entityPost.Posts, error)
@@ -26,13 +25,6 @@ type ResponsitoryPost interface {
 	GetPostByUserId(ctx context.Context, id int) ([]entityPost.Posts, error)
 	UpdatePosts(cxt context.Context, posts *entityPost.UpdatePost, id int) error
 	SearchsPost(ctx context.Context, tagsName []string, title string) ([]entityPost.Posts, error)
-=======
-	GetsPostByTagsID(ctx context.Context, tagID []int) ([]entityPost.Posts, error)
-	GetPostByTitles(ctx context.Context, title string) ([]entityPost.Posts, error)
-	GetPosts(ctx context.Context) ([]entityPost.Posts, error)
-	GetPostByUserId(ctx context.Context, id int) ([]entityPost.Posts, error)
-	UpdatePosts(cxt context.Context, posts *entityPost.UpdatePost, id int) error
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 }
 
 type BzUser interface {
@@ -41,16 +33,10 @@ type BzUser interface {
 
 type ResponsitoryPostTag interface {
 	CreatePostTag(ctx context.Context, postId int, tagId int) error
-<<<<<<< HEAD
-
-=======
-	UpdatePostTags(cxt context.Context, postID int, tagId int) error
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	DeletePostTagByPostAndTag(ctx context.Context, postId int, tagId int) error
 	DeletePostTagByPost(ctx context.Context, postId int) error
 }
 
-<<<<<<< HEAD
 type BzComment interface {
 	BusinessGetComment(ctx context.Context, postID int) ([]entityComment.Comment, *common.AppError)
 }
@@ -84,29 +70,3 @@ func NewBusinessPost(bzPost ResponsitoryPost, bzUser BzUser, bzPostTag Responsit
 func (bz *BusinessPost) AddComment(bzComment BzComment) {
 	bz.bzComment = bzComment
 }
-=======
-/*
-	type BzCategories interface {
-		GetcategoriesByID(ctx context.Context, id int) (*entityCategories.Categories, error)
-	}
-*/
-type BzTag interface {
-	BusinessGetTagByPostId(ctx context.Context, postID int) ([]entityTag.Tag, *common.AppError)
-}
-type BusinessPost struct {
-	bzPost    ResponsitoryPost
-	bzUser    BzUser
-	bzPostTag ResponsitoryPostTag
-	//bzCategories BzCategories
-	bzTag BzTag
-}
-
-func NewBusinessPost(bzPost ResponsitoryPost, bzUser BzUser, bzPostTag ResponsitoryPostTag, bzTag BzTag) *BusinessPost {
-	return &BusinessPost{
-		bzPost:    bzPost,
-		bzUser:    bzUser,
-		bzPostTag: bzPostTag,
-		bzTag:     bzTag,
-	}
-}
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8

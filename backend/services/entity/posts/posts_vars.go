@@ -9,36 +9,24 @@ type CreatePost struct {
 	FakeCategoryId string               `json:"categories_id"`
 	CategoryId     int                  `json:"-"`
 	UserId         int                  `json:"-"`
-<<<<<<< HEAD
 	Title          string               `json:"title"`
 	Content        string               `json:"content"`
 	Description    string               `json:"description"`
-=======
-	FakeUserId     string               `json:"user_id"`
-	Title          string               `json:"title"`
-	Content        string               `json:"content"`
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	Tag            []common.TagFormBase `json:"tags"`
 }
 
 func (c *CreatePost) Validate() error {
 	c.Title = strings.TrimSpace(c.Title)
 	c.Content = strings.TrimSpace(c.Content)
-<<<<<<< HEAD
 	c.Description = strings.TrimSpace(c.Description)
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	err_content := CheckContent(c.Content)
 	if err_content != nil {
 		return err_content
 	}
-<<<<<<< HEAD
 	err_description := CheckDescription(c.Description)
 	if err_description != nil {
 		return err_description
 	}
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	err_title := CheckTile(c.Title)
 	if err_title != nil {
 		return err_title
@@ -51,10 +39,7 @@ type UpdatePost struct {
 	CategoryId     *int                 `json:"-"`
 	Title          *string              `json:"title"`
 	Content        *string              `json:"content"`
-<<<<<<< HEAD
 	Description    *string              `json:"description"`
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	Tag            []common.TagFormBase `json:"tags"`
 }
 

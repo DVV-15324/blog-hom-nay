@@ -35,12 +35,8 @@ GO
 CREATE TABLE categories (
     id INT IDENTITY(1,1) PRIMARY KEY,
     name NVARCHAR(255) NOT NULL UNIQUE,
-<<<<<<< HEAD
     img NVARCHAR(255) NOT NULL UNIQUE,
     description NVARCHAR(MAX),
-=======
-    description TEXT,
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
     updated_at DATETIME DEFAULT GETDATE(),
     created_at DATETIME DEFAULT GETDATE(),
     deleted_at DATETIME DEFAULT GETDATE()
@@ -53,10 +49,7 @@ CREATE TABLE posts (
     category_id INT NOT NULL,
     title NVARCHAR(255) NOT NULL,
     content NVARCHAR(MAX),
-<<<<<<< HEAD
     description NVARCHAR(MAX),
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
     updated_at DATETIME DEFAULT GETDATE(),
     created_at DATETIME DEFAULT GETDATE(),
     deleted_at DATETIME DEFAULT GETDATE(),
@@ -73,7 +66,6 @@ GO
 
 CREATE TABLE post_tags (
     id INT IDENTITY(1,1) PRIMARY KEY,
-<<<<<<< HEAD
     post_id INT NOT NULL,
     tag_id INT NOT NULL,
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
@@ -81,24 +73,12 @@ CREATE TABLE post_tags (
     CONSTRAINT UQ_post_tag UNIQUE (post_id, tag_id)
 );
 
-=======
-    post_id INT,  -- Nếu không ghi gì thì mặc định là có thể NULL
-    tag_id INT,   -- Cũng vậy, nếu không ghi gì thì mặc định có thể NULL
-    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
-    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
-);
-GO
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 
 CREATE TABLE comments (
     id INT IDENTITY(1,1) PRIMARY KEY,
     post_id INT NOT NULL,
     user_id INT NOT NULL,
-<<<<<<< HEAD
     content NVARCHAR(MAX) NOT NULL,
-=======
-    content TEXT NOT NULL,
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
     deleted_at DATETIME DEFAULT NULL,
     created_at DATETIME DEFAULT GETDATE(),
     updated_at DATETIME DEFAULT GETDATE(),
@@ -106,7 +86,6 @@ CREATE TABLE comments (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 GO
-<<<<<<< HEAD
 
 CREATE TABLE img (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -127,5 +106,3 @@ CREATE TABLE post_likes (
     CONSTRAINT FK_post_likes_user FOREIGN KEY (user_id) REFERENCES users(id),
     CONSTRAINT FK_post_likes_post FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
 );
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8

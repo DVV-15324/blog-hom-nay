@@ -6,10 +6,7 @@ type Categories struct {
 	Id          int    `json:"-"`
 	FakeId      string `json:"id"`
 	Name        string `json:"name"`
-<<<<<<< HEAD
 	Img         string `json:"img"`
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	Description string `json:"description"`
 }
 

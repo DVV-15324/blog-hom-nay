@@ -4,25 +4,16 @@ import (
 	"bloghomnay-project/common"
 	entityPosts "bloghomnay-project/services/entity/posts"
 	"context"
-<<<<<<< HEAD
-
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	"net/http"
 )
 
 func (c *BusinessPost) BusinessGetPostByCategories(ctx context.Context, categoriesID int) ([]entityPosts.Posts, *common.AppError) {
-<<<<<<< HEAD
 	post, err := c.bzPost.GetPostByCategories(ctx, categoriesID)
 
-=======
-	posts, err := c.bzPost.GetPostByCategories(ctx, categoriesID)
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	if err != nil {
 		app := common.NewAppError(404, http.StatusText(404), err)
 		return nil, app
 	}
-<<<<<<< HEAD
 	for i := 0; i < len(post); i++ {
 		//gắn tag
 		addTag, _ := c.bzTag.BusinessGetTagByPostId(ctx, post[i].Id)
@@ -51,8 +42,4 @@ func (c *BusinessPost) BusinessGetPostByCategories(ctx context.Context, categori
 
 	}
 	return post, nil
-=======
-
-	return posts, nil
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 }

@@ -14,12 +14,9 @@ func CheckContent(content string) error {
 	}
 	return nil
 }
-<<<<<<< HEAD
 func CheckDescription(content string) error {
 	if len(content) < 1 {
 		return ErrorDescriptionNotEmpty
 	}
 	return nil
 }
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
