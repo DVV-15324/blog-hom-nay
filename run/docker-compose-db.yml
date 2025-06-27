@@ -1,0 +1,27 @@
+version: "3.3"
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Passw0rd
+    ports:
+      - "1503:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - blog-network
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong!Passw0rd", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  blog-network:
+    external: true
+
+volumes:
+  sqlserver-data:
