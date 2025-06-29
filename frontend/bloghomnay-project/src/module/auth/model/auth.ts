@@ -36,9 +36,3 @@ export type ProfileType = {
 
 
 
-<<<<<<< HEAD
-=======
-export type Response<T> = {
-    data: T
-}
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20

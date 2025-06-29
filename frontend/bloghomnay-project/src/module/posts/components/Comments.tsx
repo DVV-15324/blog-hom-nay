@@ -2,13 +2,9 @@ import { useState } from "react";
 import { enqueueSnackbar } from "notistack";
 import { CommentBase, CreateCommentPayload } from "../models/post";
 import { ApiCreateComment } from "../services/api";
-<<<<<<< HEAD
 import { Response } from "../../common/model";
 import { useHookAuth } from "../../auth/hooks/authHooks";
 import { useNavigate } from "react-router-dom";
-=======
-import { Response } from "../../auth/model/auth";
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 interface CommentBoxProps {
     postId: string;
     initialComments?: CommentBase[];
@@ -18,13 +14,8 @@ export const CommentBox = ({ postId, initialComments = [] }: CommentBoxProps) =>
     const [content, setContent] = useState("");
     const [loading, setLoading] = useState(false);
     const [commentList, setCommentList] = useState<CommentBase[]>(initialComments ?? []);
-<<<<<<< HEAD
     const { profile } = useHookAuth();
     const navigate = useNavigate()
-=======
-
-
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
     const handleSubmit = async () => {
         if (!content.trim()) {
             enqueueSnackbar("Nội dung bình luận không được để trống", { variant: "warning" });
@@ -32,7 +23,6 @@ export const CommentBox = ({ postId, initialComments = [] }: CommentBoxProps) =>
         }
         setLoading(true);
         try {
-<<<<<<< HEAD
             if (profile != null) {
                 const payload: CreateCommentPayload = { post_id: postId, content };
                 // Gọi API tạo comment, giả sử API trả về comment mới
@@ -43,13 +33,6 @@ export const CommentBox = ({ postId, initialComments = [] }: CommentBoxProps) =>
                 navigate("/login")
             }
 
-=======
-            const payload: CreateCommentPayload = { post_id: postId, content };
-            // Gọi API tạo comment, giả sử API trả về comment mới
-            const newComment = await ApiCreateComment<Response<CommentBase>>(payload);
-            setCommentList((prev) => [...prev, newComment.data]);
-            setContent("");
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
         } catch (err) {
             enqueueSnackbar("Không thể gửi bình luận", { variant: "error" });
         } finally {

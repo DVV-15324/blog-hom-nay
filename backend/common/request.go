@@ -37,6 +37,7 @@ func GetRequestContext(cxt context.Context) Request {
 	return r
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 package common
@@ -78,3 +79,5 @@ func GetRequestContext(cxt context.Context) Request {
 	return r
 }
 >>>>>>> 70a38361bb67beb662f248595a90edb388469f20
+=======
+>>>>>>> fc2c6a302c37c42992306cd7b6e66944136c830c

@@ -32,11 +32,7 @@ func (p *PostServiceSQL) UpdatePosts(cxt context.Context, posts *entity.UpdatePo
 		placeholders = append(placeholders, "description=@description")
 		args = append(args, sql.Named("description", posts.Description))
 	}
-<<<<<<< HEAD
 	query := fmt.Sprintf("UPDATE posts SET %s, updated_at= GETDATE() Where id=@id", strings.Join(placeholders, ","))
-=======
-	query := fmt.Sprintf("UPDATE posts SET %s Where id=@id", strings.Join(placeholders, ","))
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 
 	args = append(args, sql.Named("id", id))
 

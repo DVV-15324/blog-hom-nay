@@ -6,16 +6,10 @@ import axios, { AxiosError } from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import { HeartUI } from "./Heart"
 import { CommentBox } from "./Comments"
-<<<<<<< HEAD
 import { Response } from "../../common/model";
 import { ApiGetPostById, ApiGetPostByIdP } from "../services/api";
 import parse from "html-react-parser";
 import { useHookAuth } from "../../auth/hooks/authHooks";
-=======
-import { Response } from "../../auth/model/auth";
-import { ApiGetPostById } from "../services/api";
-import parse from "html-react-parser";
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 
 // Hàm xử lý lỗi
 const ErrorHandle = (error: AxiosError | Error) => {
@@ -36,11 +30,7 @@ export const DefaultLoading = () => (
 );
 
 const PostsDetail = () => {
-<<<<<<< HEAD
     const { profile } = useHookAuth();
-=======
-
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
     const { id } = useParams();
     const [posts, setPosts] = useState<PostResponse>();
     const [loading, setLoading] = useState<boolean>(true);
@@ -61,7 +51,6 @@ const PostsDetail = () => {
     const handleGetPostById = async () => {
         try {
             if (!id) return;
-<<<<<<< HEAD
             if (profile != null) {
                 const res = await ApiGetPostById<Response<PostResponse>>(id);
                 setPosts(res.data);
@@ -69,11 +58,6 @@ const PostsDetail = () => {
             const res = await ApiGetPostByIdP<Response<PostResponse>>(id);
             setPosts(res.data);
 
-=======
-            const res = await ApiGetPostById<Response<PostResponse>>(id);
-            setPosts(res.data);
-            console.log(res.data)
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
         } catch (error) {
             const err = ErrorHandle(error as AxiosError);
             enqueueSnackbar(err.message, { variant: "error" });
@@ -154,20 +138,12 @@ const PostsDetail = () => {
                         ))}
                     </div>
 
-<<<<<<< HEAD
                     <div className="text-right text-xs text-gray-400 mt-4">
                         {updated_at && new Date(updated_at).getFullYear() > 2000
                             ? `Cập nhật lúc: ${new Date(updated_at).toLocaleString()}`
                             : "Chưa cập nhật"}
                     </div>
 
-=======
-                    {updated_at && (
-                        <div className="text-right text-xs text-gray-400 mt-4">
-                            Cập nhật lúc: {new Date(updated_at).toLocaleString()}
-                        </div>
-                    )}
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
                     <CommentBox initialComments={posts.comments} postId={posts.id} />
                 </div>
 

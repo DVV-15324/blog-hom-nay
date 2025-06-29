@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
-<<<<<<< HEAD
 import { Response } from "../../common/model";
-=======
-import { Response } from "../../auth/model/auth";
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 import { enqueueSnackbar } from "notistack";
 import CircularProgress from "@mui/material/CircularProgress";
 import { PostResponse } from "../models/post";

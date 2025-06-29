@@ -25,23 +25,15 @@ func (t *PostServiceSQL) SearchsPost(ctx context.Context, tagsName []string, tit
 	args = append(args, sql.Named("title", "%"+title+"%"))
 
 	query := fmt.Sprintf(`
-<<<<<<< HEAD
 		SELECT p.id, p.user_id, p.category_id, p.description, p.title, p.content, COUNT(DISTINCT pl.id) AS [like], COUNT(DISTINCT c.id) AS [count_comment], p.created_at,
 		p.updated_at
-=======
-		SELECT p.id, p.user_id, p.category_id, p.description, p.title, p.content, COUNT(DISTINCT pl.id) AS [like], COUNT(DISTINCT c.id) AS [count_comment]
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 		FROM posts AS p
 		JOIN post_tags AS pt ON pt.post_id = p.id
 		JOIN tags AS t ON pt.tag_id = t.id
 		LEFT JOIN post_likes AS pl ON pl.post_id = p.id
 		LEFT JOIN comments AS c ON c.post_id = p.id
 		WHERE p.content LIKE @title AND t.name IN (%s)
-<<<<<<< HEAD
 		GROUP BY p.id, p.user_id, p.category_id, p.description, p.title, p.content, p.created_at, p.updated_at
-=======
-		GROUP BY p.id, p.user_id, p.category_id, p.description, p.title, p.content
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 		HAVING COUNT(DISTINCT pt.tag_id) = %d;
 	`, strings.Join(placeholders, ", "), len(tagsName))
 
@@ -54,11 +46,7 @@ func (t *PostServiceSQL) SearchsPost(ctx context.Context, tagsName []string, tit
 	var listPosts []entity.Posts
 	for rows.Next() {
 		var data entity.Posts
-<<<<<<< HEAD
 		if err := rows.Scan(&data.Id, &data.UserID, &data.CategoryId, &data.Description, &data.Title, &data.Content, &data.Like, &data.CountComment, &data.CreatedAt, &data.UpdatedAt); err != nil {
-=======
-		if err := rows.Scan(&data.Id, &data.UserID, &data.CategoryId, &data.Description, &data.Title, &data.Content, &data.Like, &data.CountComment); err != nil {
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 			return nil, err
 		}
 		listPosts = append(listPosts, data)

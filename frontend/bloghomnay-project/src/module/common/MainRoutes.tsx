@@ -9,21 +9,14 @@ import { PrivateComponent } from "./PrivateComponent"
 import { PostUI } from "../posts/components/ItemsPostUI"
 import { PublicOnlyRoute } from "../auth/components/PublicOnlyRoute "
 import CreatePostUI from "../posts/components/CreatePost"
-<<<<<<< HEAD
 
-=======
-import { ProfileUI } from "../user/ProfileUI"
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 import { MyPostUI } from "../posts/components/MyPostUI"
 import { SearchUI } from "../posts/components/SearchPostUI"
 import { NotFound } from "./ErrorUI"
 import UpdatePost from "../posts/components/UpdatePost"
 import { OverViewPostUI } from "../posts/components/OverViewPostUI"
 import PostsDetail from "../posts/components/PostDetailUI"
-<<<<<<< HEAD
 import { ProfileUI } from "../user/components/ProfileUI"
-=======
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 
 export const MainRoutes = () => {
     return (

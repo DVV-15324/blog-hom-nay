@@ -75,10 +75,6 @@ type ApiTag interface {
 }
 type ApiComment interface {
 	ApiCreateComment() func(c *gin.Context)
-<<<<<<< HEAD
-=======
-	//ApiGetComment() func(c *gin.Context)
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 	ApiGetNotification() func(c *gin.Context)
 }
 type ApiPostLike interface {

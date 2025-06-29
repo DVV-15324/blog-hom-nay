@@ -135,21 +135,13 @@ export default function NotificationMUI({ children }: notiMUIProps) {
                                     <span className="text-sm font-semibold text-gray-900">
                                         {item.user.first_name + " " + item.user.last_name}
                                     </span>
-
                                     <span className="text-sm text-gray-700">
-                                        🔔 {item.content.split('').slice(0, 20).join('')}
-                                        {item.content.split('').length > 20 && '...'}
+                                        🔔 {item.content}
                                     </span>
-
                                     <span className="text-xs text-gray-500 italic">
-                                        {
-                                            item?.post?.title
-                                                ? item.post.title.split('').slice(0, 20).join('') + (item.post.title.split('').length > 20 ? '...' : '')
-                                                : 'Không có tiêu đề'
-                                        }
+                                        {item.post?.title || "Không có tiêu đề"}
                                     </span>
                                 </div>
-
                             </MenuItem>
                         ))
                     ) : (

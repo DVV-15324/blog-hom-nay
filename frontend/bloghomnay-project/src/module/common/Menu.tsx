@@ -45,13 +45,8 @@ export default function MenuMUI({ children }: MunuMUIProps) {
                     },
                 }}
             >
-<<<<<<< HEAD
                 <MenuItem onClick={() => { navigate("my_post") }}>Quản lý bài viết </MenuItem>
                 <MenuItem onClick={() => { navigate("profile") }}>Cá nhân</MenuItem>
-=======
-                <MenuItem onClick={() => { navigate("my_post") }}>MyPost</MenuItem>
-                <MenuItem onClick={() => { navigate("profile") }}>Profile</MenuItem>
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
                 <MenuItem onClick={handleOut}>Logout</MenuItem>
             </Menu>
         </div>

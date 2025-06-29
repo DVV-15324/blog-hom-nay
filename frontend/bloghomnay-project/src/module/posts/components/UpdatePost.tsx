@@ -36,11 +36,7 @@ import {
 import { enqueueSnackbar } from "notistack";
 import { AxiosError } from "axios";
 import { Categories } from "../../categories/module/categories";
-<<<<<<< HEAD
 import { Response } from "../../common/model";
-=======
-import { Response } from "../../auth/model/auth"
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 import { useParams } from "react-router-dom";
 
 // Lấy blot image dưới dạng class constructor
@@ -288,7 +284,6 @@ export default function UpdatePost() {
 
             </div>
 
-<<<<<<< HEAD
             <div className="sm:col-span-2 ">
                 <label className=" mt-2 mb-2 text-sm font-medium text-gray-900 flex items-center justify-center xl:justify-start">Tags:</label>
                 <div className="flex flex-wrap gap-3 flex items-center justify-center">
@@ -308,20 +303,6 @@ export default function UpdatePost() {
                                     type="checkbox"
                                     checked={isChecked}
                                     disabled={isDefaultTag} // không cho bỏ chọn tag mặc định
-=======
-            <div className="sm:col-span-2">
-                <label className="block mb-2 text-sm font-medium text-gray-900">Tags</label>
-                <div className="flex flex-wrap gap-3">
-                    {tags.map((tag) => {
-                        const isChecked = selectedTags.some((t) => t.id === tag.id);
-
-                        return (
-                            <label key={tag.id} className="flex items-center space-x-2 cursor-pointer border px-3 py-1 rounded-md hover:bg-gray-100">
-                                <input
-
-                                    type="checkbox"
-                                    checked={isChecked}
->>>>>>> 70a38361bb67beb662f248595a90edb388469f20
                                     onChange={(e) => {
                                         if (e.target.checked) {
                                             setSelectedTags((prev) => [...prev, tag]);
