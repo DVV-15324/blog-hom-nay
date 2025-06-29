@@ -9,6 +9,14 @@ type TagFormBase struct {
 }
 
 func (t *TagFormBase) Mask() {
+<<<<<<< HEAD
 	uid := NewUID(uint32(t.Id), 4).ToBase58()
+=======
+<<<<<<< HEAD
+	uid := NewUID(uint32(t.Id), 4).ToBase58()
+=======
+	uid := NewUID(uint32(t.Id), 41).ToBase58()
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 	t.FakeId = uid
 }

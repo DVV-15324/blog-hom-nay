@@ -2,7 +2,15 @@ package post
 
 import (
 	"bloghomnay-project/common"
+<<<<<<< HEAD
 	entityComment "bloghomnay-project/services/entity/comment"
+=======
+<<<<<<< HEAD
+	entityComment "bloghomnay-project/services/entity/comment"
+=======
+	//entityCategories "bloghomnay-project/services/entity/categories"
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 	entityPost "bloghomnay-project/services/entity/posts"
 	entityTag "bloghomnay-project/services/entity/tag"
 	entityUser "bloghomnay-project/services/entity/user"
@@ -14,6 +22,10 @@ type ResponsitoryPost interface {
 	DeletePostById(cxt context.Context, id int) error
 	GetPostByCategories(ctx context.Context, categoryID int) ([]entityPost.Posts, error)
 	GetPostsByID(ctx context.Context, id int) (*entityPost.Posts, error)
+<<<<<<< HEAD
+	//GetsPostByTagsID(ctx context.Context, tagID []int) ([]entityPost.Posts, error)
+=======
+<<<<<<< HEAD
 	//GetsPostByTagsID(ctx context.Context, tagID []int) ([]entityPost.Posts, error)
 	GetPostByTitles(ctx context.Context, title string) ([]entityPost.Posts, error)
 	GetsPostByTagsName(ctx context.Context, tagName []string) ([]entityPost.Posts, error)
@@ -21,6 +33,19 @@ type ResponsitoryPost interface {
 	GetPostByUserId(ctx context.Context, id int) ([]entityPost.Posts, error)
 	UpdatePosts(cxt context.Context, posts *entityPost.UpdatePost, id int) error
 	SearchsPost(ctx context.Context, tagsName []string, title string) ([]entityPost.Posts, error)
+=======
+	GetsPostByTagsID(ctx context.Context, tagID []int) ([]entityPost.Posts, error)
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
+	GetPostByTitles(ctx context.Context, title string) ([]entityPost.Posts, error)
+	GetsPostByTagsName(ctx context.Context, tagName []string) ([]entityPost.Posts, error)
+	GetPosts(ctx context.Context) ([]entityPost.Posts, error)
+	GetPostByUserId(ctx context.Context, id int) ([]entityPost.Posts, error)
+	UpdatePosts(cxt context.Context, posts *entityPost.UpdatePost, id int) error
+<<<<<<< HEAD
+	SearchsPost(ctx context.Context, tagsName []string, title string) ([]entityPost.Posts, error)
+=======
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 }
 
 type BzUser interface {
@@ -29,14 +54,28 @@ type BzUser interface {
 
 type ResponsitoryPostTag interface {
 	CreatePostTag(ctx context.Context, postId int, tagId int) error
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+=======
+	UpdatePostTags(cxt context.Context, postID int, tagId int) error
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 	DeletePostTagByPostAndTag(ctx context.Context, postId int, tagId int) error
 	DeletePostTagByPost(ctx context.Context, postId int) error
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 type BzComment interface {
 	BusinessGetComment(ctx context.Context, postID int) ([]entityComment.Comment, *common.AppError)
 }
 
+<<<<<<< HEAD
+=======
 type BzTag interface {
 	BusinessGetTagByPostId(ctx context.Context, postID int) ([]entityTag.Tag, *common.AppError)
 }
@@ -66,3 +105,43 @@ func NewBusinessPost(bzPost ResponsitoryPost, bzUser BzUser, bzPostTag Responsit
 func (bz *BusinessPost) AddComment(bzComment BzComment) {
 	bz.bzComment = bzComment
 }
+=======
+/*
+	type BzCategories interface {
+		GetcategoriesByID(ctx context.Context, id int) (*entityCategories.Categories, error)
+	}
+*/
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
+type BzTag interface {
+	BusinessGetTagByPostId(ctx context.Context, postID int) ([]entityTag.Tag, *common.AppError)
+}
+
+type BzPostLike interface {
+	BusinessGetPostLike(ctx context.Context, userId int, postID int) (bool, *common.AppError)
+}
+type BusinessPost struct {
+	bzPost     ResponsitoryPost
+	bzUser     BzUser
+	bzPostTag  ResponsitoryPostTag
+	bzComment  BzComment
+	bzTag      BzTag
+	bzPostLike BzPostLike
+}
+
+func NewBusinessPost(bzPost ResponsitoryPost, bzUser BzUser, bzPostTag ResponsitoryPostTag, bzTag BzTag, bzPostLike BzPostLike) *BusinessPost {
+	return &BusinessPost{
+		bzPost:     bzPost,
+		bzUser:     bzUser,
+		bzPostTag:  bzPostTag,
+		bzTag:      bzTag,
+		bzComment:  nil,
+		bzPostLike: bzPostLike,
+	}
+}
+<<<<<<< HEAD
+func (bz *BusinessPost) AddComment(bzComment BzComment) {
+	bz.bzComment = bzComment
+}
+=======
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033

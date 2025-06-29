@@ -13,6 +13,10 @@ func (c *BusinessPost) BusinessGetALLPost(ctx context.Context) ([]entityPosts.Po
 		app := common.NewAppError(404, http.StatusText(404), err)
 		return nil, app
 	}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 	for i := 0; i < len(post); i++ {
 		//gắn tag
 		addTag, _ := c.bzTag.BusinessGetTagByPostId(ctx, post[i].Id)
@@ -36,6 +40,8 @@ func (c *BusinessPost) BusinessGetALLPost(ctx context.Context) ([]entityPosts.Po
 		user.Avatar = addUser.Avatar
 		user.LastName = addUser.LastName
 		user.Phone = addUser.Phone
+<<<<<<< HEAD
+=======
 
 		user.Mask()
 		post[i].User = &user
@@ -43,4 +49,17 @@ func (c *BusinessPost) BusinessGetALLPost(ctx context.Context) ([]entityPosts.Po
 	}
 	return post, nil
 
+=======
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
+
+		user.Mask()
+		post[i].User = &user
+
+	}
+	return post, nil
+<<<<<<< HEAD
+
+=======
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 }

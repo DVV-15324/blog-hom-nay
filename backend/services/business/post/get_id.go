@@ -4,23 +4,53 @@ import (
 	"bloghomnay-project/common"
 	entityPosts "bloghomnay-project/services/entity/posts"
 	"context"
+<<<<<<< HEAD
 
 	"net/http"
 )
 
 func (c *BusinessPost) BusinessGetPostByID(ctx context.Context, userId int, postId int) (*entityPosts.Posts, *common.AppError) {
 	post, err := c.bzPost.GetPostsByID(ctx, postId)
+=======
+<<<<<<< HEAD
+
+	"net/http"
+)
+
+func (c *BusinessPost) BusinessGetPostByID(ctx context.Context, userId int, postId int) (*entityPosts.Posts, *common.AppError) {
+	post, err := c.bzPost.GetPostsByID(ctx, postId)
+=======
+	"fmt"
+	"net/http"
+)
+
+func (c *BusinessPost) BusinessGetPostByID(ctx context.Context, id int) (*entityPosts.Posts, *common.AppError) {
+	post, err := c.bzPost.GetPostsByID(ctx, id)
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 	if err != nil {
 		app := common.NewAppError(404, http.StatusText(404), err)
 		return nil, app
 	}
+<<<<<<< HEAD
 	//checkLike
 	isLike, err_postLike := c.bzPostLike.BusinessGetPostLike(ctx, userId, postId)
 
+=======
+<<<<<<< HEAD
+	//checkLike
+	isLike, err_postLike := c.bzPostLike.BusinessGetPostLike(ctx, userId, postId)
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 	if err_postLike != nil {
 		return nil, err_postLike
 	}
 	post.IsLike = isLike
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
+	//gắn tag
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 	addTag, _ := c.bzTag.BusinessGetTagByPostId(ctx, post.Id)
 
 	listTag := []common.TagFormBase{}
@@ -32,6 +62,10 @@ func (c *BusinessPost) BusinessGetPostByID(ctx context.Context, userId int, post
 		tag.Mask()
 		listTag = append(listTag, tag)
 	}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 	addComment, _ := c.bzComment.BusinessGetComment(ctx, postId)
 
 	if addComment != nil {
@@ -52,6 +86,12 @@ func (c *BusinessPost) BusinessGetPostByID(ctx context.Context, userId int, post
 		post.Comments = listComment
 	}
 
+<<<<<<< HEAD
+=======
+=======
+	fmt.Println(listTag)
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 	//gắn user
 	addUser, _ := c.bzUser.BzGetUsersById(ctx, post.UserID)
 	user := common.UserFormBase{}
@@ -61,6 +101,10 @@ func (c *BusinessPost) BusinessGetPostByID(ctx context.Context, userId int, post
 	user.LastName = addUser.LastName
 	user.Phone = addUser.Phone
 	user.Mask()
+<<<<<<< HEAD
+
+=======
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	post.User = &user
 
 	post.Tag = listTag

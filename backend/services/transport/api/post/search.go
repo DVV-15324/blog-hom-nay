@@ -1,5 +1,9 @@
 package post
 
+<<<<<<< HEAD
+/*
+=======
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 import (
 	"bloghomnay-project/common"
 
@@ -21,3 +25,7 @@ func (api *ApiPosts) ApiSearch() func(c *gin.Context) {
 
 	}
 }
+<<<<<<< HEAD
+*/
+=======
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8

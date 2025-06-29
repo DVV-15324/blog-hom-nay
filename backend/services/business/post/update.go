@@ -18,6 +18,7 @@ func (c *BusinessPost) BusinessUpdatePostByID(ctx context.Context, data *entityP
 	addTag, removetag := filterTags(post.Tag, data.Tag)
 
 	for _, tag := range addTag {
+<<<<<<< HEAD
 		if tag.Id == 0 {
 			println("⚠️ Bỏ qua tag có ID = 0 (không hợp lệ)")
 			continue
@@ -27,6 +28,13 @@ func (c *BusinessPost) BusinessUpdatePostByID(ctx context.Context, data *entityP
 				println("Tag đã tồn tại:", tag.Id, "postId:", postId)
 				continue
 			}
+=======
+<<<<<<< HEAD
+		if err := c.bzPostTag.CreatePostTag(ctx, postId, tag.Id); err != nil {
+=======
+		if err := c.bzPostTag.UpdatePostTags(ctx, postId, tag.Id); err != nil {
+>>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
+>>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 			return common.NewAppError(500, http.StatusText(500), err)
 		}
 	}
