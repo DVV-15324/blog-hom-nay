@@ -7,11 +7,7 @@ import (
 	"net/http"
 )
 
-<<<<<<< HEAD
 func (c *BusinessComment) BusinessGetNotification(ctx context.Context, userid int) ([]entityComment.Comment, *common.AppError) {
-=======
-func (c *BusinessComment) BusinessGetNotification(ctx context.Context, userid int, idPost int) ([]entityComment.Comment, *common.AppError) {
->>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 
 	data, err := c.bzComment.GetNotification(ctx, userid)
 
@@ -22,11 +18,7 @@ func (c *BusinessComment) BusinessGetNotification(ctx context.Context, userid in
 	}
 	for i := 0; i < len(data); i++ {
 		postBase := common.PostFormBase{}
-<<<<<<< HEAD
 		post, err_post := c.bzPost.BusinessGetPostByID(ctx, userid, data[i].PostId)
-=======
-		post, err_post := c.bzPost.BusinessGetPostByID(ctx, userid, idPost)
->>>>>>> 46bb8061e5da0877aec93433ec83d5f5d8b0e033
 		if err_post != nil {
 			return nil, err_post
 		}
