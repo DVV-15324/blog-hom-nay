@@ -1,0 +1,35 @@
+https://docs.docker.com/engine/install/ubuntu/
+https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-setup-tools?view=sql-server-ver17 &
+tabs=ubuntu-install
+sqlcmd -S localhost,1503 -U sa -P 'YourStrong!Passw0rd' -C
+
+docker build -t vudinh2025/bloghomnay:latest .
+docker push vudinh2025/bloghomnay:latest
+
+docker build -t vudinh2025/bloghomnay-fe:latest .
+docker push vudinh2025/bloghomnay-fe:latest
+
+cd backend
+docker build -t vudinh2025/bloghomnay:latest .
+
+cd frontend
+cd bloghomnay-project
+docker build -t vudinh2025/bloghomnay-fe:latest .
+
+docker tag bloghomnay-backend vudinh2025/bloghomnay:latest
+docker push vudinh2025/bloghomnay:latest
+
+docker-compose -f docker-compose.yml up --build
+
+docker run -d --name blog-backend \
+    -p 3000:3000 \
+    -e DB_HOST=14.225.206.78 \
+    -e DB_PORT=1503 \
+    -e DB_USER=sa \
+    -e DB_PASSWORD='YourStrong!Passw0rd' \
+    -e DB_NAME=bloghomnay \
+    vudinh2025/bloghomnay:latest
+
+docker run -d --name blog-frontend \
+    -p 80:80 \
+    vudinh2025/bloghomnay-fe:latest
