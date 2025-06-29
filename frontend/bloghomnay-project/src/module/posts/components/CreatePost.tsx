@@ -28,7 +28,11 @@ import {
 import { enqueueSnackbar } from "notistack";
 import { AxiosError } from "axios";
 import { Categories } from "../../categories/module/categories";
+<<<<<<< HEAD
 import { Response } from "../../common/model";
+=======
+import { Response } from "../../auth/model/auth"
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 
 import ImageResize from 'quill-resize-image';
 Quill.register('modules/imageResize', ImageResize);
@@ -224,7 +228,11 @@ export default function CreatePost() {
 
             <div className="sm:col-span-2">
                 <label className="block mb-2 text-sm font-medium text-gray-900">
+<<<<<<< HEAD
                     Category:
+=======
+                    Category
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
                 </label>
                 <select
                     value={selectedCategoryId}
@@ -242,9 +250,15 @@ export default function CreatePost() {
                 </select>
             </div>
 
+<<<<<<< HEAD
             <div className="sm:col-span-2 ">
                 <label className=" mt-2 mb-2 text-sm font-medium text-gray-900 flex items-center justify-center xl:justify-start">Tags:</label>
                 <div className="flex flex-wrap gap-3 flex items-center justify-center">
+=======
+            <div className="sm:col-span-2">
+                <label className="block mb-2 text-sm font-medium text-gray-900">Tags</label>
+                <div className="flex flex-wrap gap-3">
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
                     {tags.map((tag) => {
 
                         // Nếu tag là mặc định của category thì disable checkbox để không thể xóa

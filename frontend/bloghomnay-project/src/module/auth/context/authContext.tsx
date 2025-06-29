@@ -1,11 +1,18 @@
 import React, { createContext, useCallback, useEffect, useState } from "react";
+<<<<<<< HEAD
 import { LoginType, ProfileType, RegisterType, ResponseLoginType } from "../model/auth"
+=======
+import { LoginType, ProfileType, RegisterType, Response, ResponseLoginType } from "../model/auth"
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 import { useNavigate, ErrorResponse } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import axios, { AxiosError } from "axios";
 import CircularProgress from '@mui/material/CircularProgress';
 import { ApiLogin, ApiProfile, ApiRegister } from "../services/api";
+<<<<<<< HEAD
 import { Response } from "../../common/model";
+=======
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 
 const ErrorHandle = (error: AxiosError | Error) => {
     if (axios.isAxiosError(error)) {

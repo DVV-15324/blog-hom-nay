@@ -3,6 +3,10 @@ package post
 import (
 	"bloghomnay-project/common"
 	entityPosts "bloghomnay-project/services/entity/posts"
+<<<<<<< HEAD
+=======
+	"fmt"
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,12 +23,21 @@ func (api *ApiPosts) ApiCreatePost() func(c *gin.Context) {
 
 		data.CategoryId = int(common.DecodeFromBase58(data.FakeCategoryId).LocalID)
 		id := common.GetRequestContext(c.Request.Context())
+<<<<<<< HEAD
 
+=======
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 		data.UserId = int(common.DecodeFromBase58(id.GetSub()).LocalID)
 		for i := 0; i < len(data.Tag); i++ {
 			data.Tag[i].Id = int(common.DecodeFromBase58(data.Tag[i].FakeId).LocalID)
 		}
 
+<<<<<<< HEAD
+=======
+		// Kiểm tra dữ liệu đã bind và decode
+		fmt.Println("Create post data:", data)
+
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 		// Gọi business logic để tạo post
 		er := api.bz.BusinessCreatePost(c, &data)
 		if er != nil {

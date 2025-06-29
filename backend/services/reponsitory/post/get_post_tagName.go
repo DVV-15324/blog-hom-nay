@@ -23,8 +23,12 @@ func (t *PostServiceSQL) GetsPostByTagsName(ctx context.Context, tagName []strin
 
 	// Dùng GROUP BY + HAVING COUNT(DISTINCT tag_id) = số lượng tag cần tìm
 	query := fmt.Sprintf(`
+<<<<<<< HEAD
 		SELECT p.id, p.user_id, p.category_id, p.description, p.title, p.content, COUNT(DISTINCT pl.id) AS [like], COUNT(DISTINCT c.id) AS [count_comment], p.created_at,
 		p.updated_at
+=======
+		SELECT p.id, p.user_id, p.category_id, p.description, p.title, p.content, COUNT(DISTINCT pl.id) AS [like], COUNT(DISTINCT c.id) AS [count_comment]
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 		FROM posts AS p
 		JOIN post_tags AS pt ON pt.post_id = p.id
 		JOIN tags AS t ON pt.tag_id = t.id
@@ -44,7 +48,11 @@ func (t *PostServiceSQL) GetsPostByTagsName(ctx context.Context, tagName []strin
 	var listPosts []entity.Posts
 	for rows.Next() {
 		var data entity.Posts
+<<<<<<< HEAD
 		if err := rows.Scan(&data.Id, &data.UserID, &data.CategoryId, &data.Description, &data.Title, &data.Content, &data.Like, &data.CountComment, &data.CreatedAt, &data.UpdatedAt); err != nil {
+=======
+		if err := rows.Scan(&data.Id, &data.UserID, &data.CategoryId, &data.Description, &data.Title, &data.Content, &data.Like, &data.CountComment); err != nil {
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 			return nil, err
 		}
 		listPosts = append(listPosts, data)

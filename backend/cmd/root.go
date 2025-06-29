@@ -58,12 +58,19 @@ func StartService(r *gin.Engine) {
 	postV1 := v1.Group("post")
 	postV1.POST("/get_post_all", comp.ApiPost.ApiGetAll())
 	postV1.POST("/get_post_categories_id/:categories-id", comp.ApiPost.ApiGetPostByCategories())
+<<<<<<< HEAD
 	postV1.POST("/get_post_id_p/:post-id", comp.ApiPost.ApiGetPostById())
+=======
+	postV1.POST("/get_post_id/:post-id", comp.ApiPost.ApiGetPostById())
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 	postV1.POST("/get_post_tag", comp.ApiPost.ApiSearch())
 
 	postV2 := v2.Group("post").Use(middleware.RequiredAuth(comp.BzIntrospect))
 	postV2.POST("/get_post_user_id", comp.ApiPost.ApiGetPostByUserId())
+<<<<<<< HEAD
 	postV2.POST("/get_post_id/:post-id", comp.ApiPost.ApiGetPostById())
+=======
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 	postV2.POST("/create_post", comp.ApiPost.ApiCreatePost())
 	postV2.POST("/delete_post/:post-id", comp.ApiPost.ApiDeletePost())
 	postV2.POST("/update_post_id/:post-id", comp.ApiPost.ApiUpdatePost())

@@ -1,7 +1,13 @@
 
+<<<<<<< HEAD
 import axios, { AxiosResponse } from "axios"
 import { CreateCommentPayload, CreatePostType, UpdatePostType } from "../models/post"
 import { axiosInstance } from "../../common/api"
+=======
+import { axiosInstance } from "../../auth/services/api"
+import axios, { AxiosResponse } from "axios"
+import { CreateCommentPayload, CreatePostType, UpdatePostType } from "../models/post"
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 export const ApiGetAllPost = async <T>(): Promise<T> => {
     const response: AxiosResponse<T> = await axiosInstance.post("/v1/post/get_post_all")
     return response.data
@@ -12,6 +18,7 @@ export const ApiGetPostByCategories = async <T>(id: string): Promise<T> => {
 }
 
 export const ApiGetPostById = async <T>(id: string): Promise<T> => {
+<<<<<<< HEAD
     const response: AxiosResponse<T> = await axiosInstance.post(`/v2/post/get_post_id/${id}`)
     return response.data
 }
@@ -22,6 +29,12 @@ export const ApiGetPostByIdP = async <T>(id: string): Promise<T> => {
 }
 
 
+=======
+    const response: AxiosResponse<T> = await axiosInstance.post(`/v1/post/get_post_id/${id}`)
+    return response.data
+}
+
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 export const ApiGetPostByUser = async <T>(): Promise<T> => {
     const response: AxiosResponse<T> = await axiosInstance.post(`/v2/post/get_post_user_id`)
     return response.data
@@ -97,9 +110,12 @@ export const ApiGetAllTags = async <T>(): Promise<T> => {
 export const ApiGetNotification = async <T>(): Promise<T> => {
     const response: AxiosResponse<T> = await axiosInstance.post(`/v2/comment/get_notication`)
     return response.data
+<<<<<<< HEAD
 }
 
 export const ApiDeletePost = async <T>(data: { id: string }): Promise<T> => {
     const response: AxiosResponse<T> = await axiosInstance.post(`/v2/post/delete_post/${data.id}`)
     return response.data
+=======
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 }

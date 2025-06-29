@@ -16,7 +16,10 @@ func (c *BusinessPost) BusinessGetPostByID(ctx context.Context, userId int, post
 	}
 	//checkLike
 	isLike, err_postLike := c.bzPostLike.BusinessGetPostLike(ctx, userId, postId)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 	if err_postLike != nil {
 		return nil, err_postLike
 	}

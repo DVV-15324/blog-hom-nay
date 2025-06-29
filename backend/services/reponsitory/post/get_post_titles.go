@@ -16,15 +16,23 @@ func (t *PostServiceSQL) GetPostByTitles(ctx context.Context, title string) ([]e
 		p.title, 
 		p.content,
 		COUNT(DISTINCT pl.id) AS [like],
+<<<<<<< HEAD
 		COUNT(DISTINCT c.id) AS [count_comment],
 		p.created_at,
 		p.updated_at
+=======
+		COUNT(DISTINCT c.id) AS [count_comment]
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 		FROM posts AS p
 		LEFT JOIN post_likes AS pl ON pl.post_id = p.id
 		LEFT JOIN comments AS c ON c.post_id = p.id
 		WHERE p.content LIKE @title
 		GROUP BY 
+<<<<<<< HEAD
 			p.id, p.user_id, p.category_id, p.description, p.title, p.content, p.created_at, p.updated_at;`
+=======
+			p.id, p.user_id, p.category_id, p.description, p.title, p.content;`
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 	likePattern := "%" + title + "%" // Tìm tiêu đề chứa từ khóa
 
 	rows, err := t.db.QueryContext(ctx, query, sql.Named("title", likePattern))
@@ -36,7 +44,11 @@ func (t *PostServiceSQL) GetPostByTitles(ctx context.Context, title string) ([]e
 	var listPosts []entity.Posts
 	for rows.Next() {
 		var data entity.Posts
+<<<<<<< HEAD
 		if err := rows.Scan(&data.Id, &data.UserID, &data.CategoryId, &data.Description, &data.Title, &data.Content, &data.Like, &data.CountComment, &data.CreatedAt, &data.UpdatedAt); err != nil {
+=======
+		if err := rows.Scan(&data.Id, &data.UserID, &data.CategoryId, &data.Description, &data.Title, &data.Content, &data.Like, &data.CountComment); err != nil {
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
 			return nil, err
 		}
 		listPosts = append(listPosts, data)

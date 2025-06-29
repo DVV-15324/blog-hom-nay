@@ -11,10 +11,17 @@
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
+<<<<<<< HEAD
     "@emotion/styled": "^11.14.1",
     "@hookform/resolvers": "^5.0.1",
     "@mui/icons-material": "^7.1.0",
     "@mui/material": "^7.1.2",
+=======
+    "@emotion/styled": "^11.14.0",
+    "@hookform/resolvers": "^5.0.1",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/material": "^7.1.0",
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
     "@react-md/app-bar": "^5.1.6",
     "@react-md/material-icons": "^6.0.2",
     "@react-sandbox/heart": "^1.1.0",
@@ -64,4 +71,8 @@
       "API_URL"
     ]
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 70a38361bb67beb662f248595a90edb388469f20
