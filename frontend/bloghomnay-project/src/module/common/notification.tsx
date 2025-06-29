@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import { useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from "axios";
-import { Response } from "../auth/model/auth";
+import { Response } from "./model";
 import { ApiGetNotification } from '../posts/services/api';
 import { Notification } from '../posts/models/post';
 import { CircularProgress } from '@mui/material';
@@ -135,13 +135,21 @@ export default function NotificationMUI({ children }: notiMUIProps) {
                                     <span className="text-sm font-semibold text-gray-900">
                                         {item.user.first_name + " " + item.user.last_name}
                                     </span>
+
                                     <span className="text-sm text-gray-700">
-                                        🔔 {item.content}
+                                        🔔 {item.content.split('').slice(0, 20).join('')}
+                                        {item.content.split('').length > 20 && '...'}
                                     </span>
+
                                     <span className="text-xs text-gray-500 italic">
-                                        {item.post?.title || "Không có tiêu đề"}
+                                        {
+                                            item?.post?.title
+                                                ? item.post.title.split('').slice(0, 20).join('') + (item.post.title.split('').length > 20 ? '...' : '')
+                                                : 'Không có tiêu đề'
+                                        }
                                     </span>
                                 </div>
+
                             </MenuItem>
                         ))
                     ) : (
