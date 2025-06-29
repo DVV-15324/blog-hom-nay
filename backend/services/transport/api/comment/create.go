@@ -3,10 +3,6 @@ package comment
 import (
 	"bloghomnay-project/common"
 	entityComment "bloghomnay-project/services/entity/comment"
-<<<<<<< HEAD
-
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 	"github.com/gin-gonic/gin"
 )
 

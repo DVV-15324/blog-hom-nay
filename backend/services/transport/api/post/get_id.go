@@ -23,10 +23,6 @@ func (api *ApiPosts) ApiGetPostById() func(c *gin.Context) {
 			common.NewErrorH(c, er)
 			return
 		}
-<<<<<<< HEAD
-
-=======
->>>>>>> c821afe7457cacaa8d68fb4598eecf76a42272b8
 		post.Mask()
 		common.NewSuccessH(c, post)
 
