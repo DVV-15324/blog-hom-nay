@@ -22,7 +22,11 @@ import {
     TagBase,
     PostResponse,
 } from "../models/post";
+<<<<<<< HEAD
 //import parse from "html-react-parser";
+=======
+import parse from "html-react-parser";
+>>>>>>> fc2c6a302c37c42992306cd7b6e66944136c830c
 import {
 
     ApiGetAllCategories,
@@ -38,7 +42,10 @@ import { AxiosError } from "axios";
 import { Categories } from "../../categories/module/categories";
 import { Response } from "../../common/model";
 import { useParams } from "react-router-dom";
+<<<<<<< HEAD
 import PreviewWithCodeBlock from "./PreviewWithCodeBlock";
+=======
+>>>>>>> fc2c6a302c37c42992306cd7b6e66944136c830c
 
 // Lấy blot image dưới dạng class constructor
 // ép kiểu "any" cho đơn giản (cách an toàn hơn thì phải import kiểu từ 'parchment')
@@ -212,7 +219,6 @@ export default function UpdatePost() {
             ["link", "color"],
             ["code-block"],
             ["clean"],
-
         ],
         imageResize: {
             displaySize: true,
@@ -411,10 +417,10 @@ export default function UpdatePost() {
 
                             }
                             <PreviewWithCodeBlock content={content} />
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </div >
+                    </div >
+                </div >
+            </div >
         </div >
     );
 }
