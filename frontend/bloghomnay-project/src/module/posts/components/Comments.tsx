@@ -5,7 +5,6 @@ import { ApiCreateComment } from "../services/api";
 import { Response } from "../../common/model";
 import { useHookAuth } from "../../auth/hooks/authHooks";
 import { useNavigate } from "react-router-dom";
-
 interface CommentBoxProps {
     postId: string;
     initialComments?: CommentBase[];
