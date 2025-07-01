@@ -225,7 +225,6 @@ export default function UpdatePost() {
         });
     }
 
-
     return (
         <div className="flex h-full w-full flex-col items-center justify-center">
             <div className="sm:col-span-2">
