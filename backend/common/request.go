@@ -2,20 +2,20 @@ package common
 
 import "context"
 
-type RequestResponse struct {
+type requestResponse struct {
 	sub string
 	tid string
 }
 
-func NewRequestResponse(sub string, tid string) *RequestResponse {
-	return &RequestResponse{sub: sub, tid: tid}
+func NewRequestResponse(sub string, tid string) *requestResponse {
+	return &requestResponse{sub: sub, tid: tid}
 }
 
-func (r *RequestResponse) GetSub() string {
+func (r *requestResponse) GetSub() string {
 	return r.sub
 }
 
-func (r *RequestResponse) GetTid() string {
+func (r *requestResponse) GetTid() string {
 	return r.tid
 }
 
