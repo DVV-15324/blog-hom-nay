@@ -182,9 +182,9 @@ const PostsDetail = () => {
                             </div>
 
                             <CommentBox initialComments={posts.comments} postId={posts.id} />
-                        </div>
+                        </div >
 
-                    </div>
+                    </div >
                     <div className="hidden xl:col-span-1"></div>
                     {/* Sidebar dưới cho mobile (cố định ở dưới cùng màn hình) */}
                     <div className="fixed bottom-0 left-0 w-full xl:hidden bg-white border-t p-4 shadow z-50">
@@ -219,7 +219,7 @@ const PostsDetail = () => {
 
 
 
-                </div>) : <div className="text-center text-red-500">Không tìm thấy bài viết.</div>}
+                </div >) : <div className="text-center text-red-500">Không tìm thấy bài viết.</div>}
 
         </>
     );
