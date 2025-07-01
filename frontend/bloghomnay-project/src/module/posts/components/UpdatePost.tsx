@@ -87,7 +87,6 @@ Quill.register('formats/image', CustomImage, true);
 
 
 
-
 export default function UpdatePost() {
     const { id } = useParams();
     const [uploadedImages, setImage] = useState<ImgReponse[]>([]);
