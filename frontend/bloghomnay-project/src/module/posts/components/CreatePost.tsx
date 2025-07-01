@@ -16,7 +16,6 @@ import {
     ImgReponse,
     TagBase,
 } from "../models/post";
-
 import {
     ApiCreatePost,
     ApiGetAllCategories,
@@ -358,10 +357,10 @@ export default function CreatePost() {
                             <h2 className="text-sm font-medium text-gray-900 mb-2">Nội Dung Blog</h2>
                             {/*<div className="ql-editor">{parse(content)}</div>*/}
                             <PreviewWithCodeBlock content={content} />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        </div >
+                    </div >
+                </div >
+            </div >
+        </div >
     );
 }
