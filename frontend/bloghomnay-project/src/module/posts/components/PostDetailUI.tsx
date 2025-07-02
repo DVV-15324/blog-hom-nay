@@ -13,6 +13,42 @@ import { useHookAuth } from "../../auth/hooks/authHooks";
 import { Helmet } from 'react-helmet';
 import PreviewWithCodeBlock from "./PreviewWithCodeBlock";
 
+
+interface TOCItem {
+    id: string;
+    text: string;
+    tag: "h1" | "h2" | "h3";
+}
+
+function extractTOCFromHTML(html: string): TOCItem[] {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    const headings = Array.from(doc.querySelectorAll("h1, h2, h3"));
+    return headings.map((heading, index) => {
+
+        const id = `heading-${index}`;
+        heading.setAttribute("id", id); // Thêm id để link tới
+        return {
+            id,
+            text: heading.textContent || "",
+            tag: heading.tagName.toLowerCase() as "h1" | "h2" | "h3",
+        };
+    });
+}
+
+function addIdToHeadings(html: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const headings = Array.from(doc.querySelectorAll("h1, h2, h3"));
+
+    headings.forEach((heading, index) => {
+        heading.setAttribute("id", `heading-${index}`);
+    });
+
+    return doc.body.innerHTML;
+}
+
 // Hàm xử lý lỗi
 const ErrorHandle = (error: AxiosError | Error) => {
     if (axios.isAxiosError(error)) {
@@ -39,6 +75,38 @@ const PostsDetail = () => {
     const [likeCount, setLikeCount] = useState<number>(0);
     const navigate = useNavigate();
     const [isLike, setIsLike] = useState<boolean>(false);
+    const [tocList, setTocList] = useState<TOCItem[]>([]);
+    const [activeId, setActiveId] = useState<string | null>(null);
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (let entry of entries) {
+                    if (entry.isIntersecting) {
+                        setActiveId(entry.target.id);
+                        break;
+                    }
+                }
+            },
+            {
+                rootMargin: "0px 0px -85% 0px", // quan trọng! phát hiện khi heading nằm trong khoảng trên
+                threshold: 0.1,
+            }
+        );
+
+        const elements = document.querySelectorAll("h1, h2, h3");
+        elements.forEach((el) => observer.observe(el));
+
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        if (posts?.content) {
+            const htmlWithIds = addIdToHeadings(posts.content);
+            const list = extractTOCFromHTML(htmlWithIds);
+            setTocList(list);
+        }
+    }, [posts?.content]);
+
     useEffect(() => {
         if (posts) {
             setLikeCount(posts.like);
@@ -122,7 +190,7 @@ const PostsDetail = () => {
                         <aside className="xl:col-span-1 hidden xl:block">
                             <div className="sticky top-24 flex flex-col w-full items-end gap-4 xl:mt-20" >
 
-                                <div className="flex justify-center items-center flex-col">
+                                <div className="fixed flex justify-center items-center flex-col">
                                     <img
                                         src={user?.avatar.String || "/av.png"}
                                         alt={user?.first_name}
@@ -163,7 +231,8 @@ const PostsDetail = () => {
                             <div className="rounded-xl shadow p-5 bg-white mb-6 border border-gray-200">
                                 {/*<h2 className="text-xl font-semibold mb-2 text-black">{title}</h2>*/}
                                 <div className="text-gray-700 mb-3 ">
-                                    <PreviewWithCodeBlock content={content} />
+                                    <PreviewWithCodeBlock content={addIdToHeadings(content)} />
+
                                 </div>
 
 
@@ -188,7 +257,35 @@ const PostsDetail = () => {
                             </div >
 
                         </div >
-                        <div className="hidden xl:col-span-1"></div>
+                        <div className="hidden xl:col-span-1 xl:block">
+                            <div className="fixed top-24 mt-6 w-64 max-h-[400px] overflow-y-auto p-4 bg-white rounded-md border border-gray-200 shadow">
+                                <h3 className="text-lg font-semibold mb-2 text-gray-800 text-center">Mục lục</h3>
+                                <ul className="space-y-1 text-sm">
+                                    {tocList.map((item) => (
+                                        <li key={item.id}>
+                                            <button
+                                                onClick={() => {
+                                                    const target = document.getElementById(item.id);
+                                                    if (target) {
+                                                        target.scrollIntoView({ behavior: 'smooth' });
+                                                    }
+                                                }}
+                                                className={`block w-full text-left px-2 py-1 rounded hover:underline${item.tag === 'h2' ? 'pl-4' : item.tag === 'h3' ? 'pl-6' : 'pl-2'}${activeId === item.id
+                                                    ? 'border-l-4 border-red-500 bg-red-50 font-semibold text-red-600'
+                                                    : 'border-l-4 border-transparent text-blue-600'
+                                                    }
+                                                        `}
+                                            >
+                                                {item.text}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+
+
+
                         {/* Sidebar dưới cho mobile (cố định ở dưới cùng màn hình) */}
                         <div className="fixed bottom-0 left-0 w-full xl:hidden bg-white border-t p-4 shadow z-50">
                             <div className="flex flex-raw  items-center justify-center gap-2">
@@ -223,7 +320,8 @@ const PostsDetail = () => {
 
 
 
-                    </div ></div>) : <div className="text-center text-red-500">Không tìm thấy bài viết.</div>}
+                    </div >
+                </div>) : <div className="text-center text-red-500">Không tìm thấy bài viết.</div>}
 
         </>
     );
