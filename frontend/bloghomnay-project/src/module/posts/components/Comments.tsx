@@ -76,7 +76,7 @@ export const CommentBox = ({ postId, initialComments = [] }: CommentBoxProps) =>
                         <img
                             src={c.user?.avatar?.String || "/av.png"}
                             alt={`${c.user?.first_name || ""} ${c.user?.last_name || ""}`}
-                            className="w-10 h-10 rounded-full object-cover"
+                            className="w-10 h-10 rounded-full object-cover cursor-pointer"
                             onClick={(e) => handleProfileOthers(e, c.user_id)}
 
                         />

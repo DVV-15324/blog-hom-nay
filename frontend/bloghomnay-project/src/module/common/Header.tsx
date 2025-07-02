@@ -106,13 +106,11 @@ const HeaderMain = ({ children }: HeaderMainProps) => {
                         <div className="flex flex-1 xl:flex-2 justify-end items-center">
                             <a className="hidden xl:flex items-center justify-center p-2 m-1 h-[48px] hover:text-amber-700 cursor-pointer rounded-sm text-xl text-green-900" onClick={() => { window.location.href = "/"; }}>Trang chủ</a>
                             <a className="hidden xl:flex items-center justify-center p-2 m-1 h-[48px] hover:text-amber-700 cursor-pointer rounded-sm text-xl text-green-900" onClick={() => { navigate(`/user/${profile?.id!}`); }}>Trang hồ sơ</a>
-
-                            <NotificationMUI>
-                                <div className="hidden xl:flex">
+                            <div className="hidden xl:flex">
+                                <NotificationMUI>
                                     Thông báo
-                                </div>
-
-                            </NotificationMUI>
+                                </NotificationMUI>
+                            </div>
 
                             <a className="hidden xl:flex items-center justify-center p-2 m-1 h-[48px] hover:text-amber-700 cursor-pointer rounded-sm text-xl text-green-900" onClick={() => { navigate('/create_post'); }}>Tạo Post</a>
 
@@ -126,7 +124,7 @@ const HeaderMain = ({ children }: HeaderMainProps) => {
                                 </MenuMUI>
                             ) : (
                                 <a
-                                    className="hidden xl:block p-1 m-2 hover:bg-gray-200 hover:text-black bg-red-900 cursor-pointer rounded-sm text-xl text-white"
+                                    className="hidden xl:block p-2 m-2 hover:bg-gray-200 hover:text-black bg-red-900 cursor-pointer rounded-sm text-xl text-white"
                                     onClick={() => { navigate('/login'); }}
                                 >
                                     Đăng nhập
@@ -154,7 +152,7 @@ const HeaderMain = ({ children }: HeaderMainProps) => {
                             )}
                         </div>
                     </div>
-                </div>
+                </div >
 
                 <div className="flex h-full w-full pt-[90px]">
                     {children}
