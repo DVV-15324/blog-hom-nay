@@ -2,7 +2,7 @@ import axios from "axios"
 
 //'http://14.225.206.78:3000'
 export const axiosInstance = axios.create({
-    baseURL: 'https://bloghomnay.com/api',
+    baseURL: 'http://14.225.206.78:3000',
 })
 
 
