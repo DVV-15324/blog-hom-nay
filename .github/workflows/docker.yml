@@ -9,10 +9,13 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    environment: Docker
     steps:
       - uses: actions/checkout@v4
-
+      - name: Debug Docker login input
+        run: |
+          echo "USERNAME=${{ secrets.DOCKER_USERNAME != '' }}"
+          echo "PASSWORD=${{ secrets.DOCKER_PASSWORD != '' }}"
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -42,8 +45,8 @@ jobs:
             docker stop blog-backend || true
             docker rm blog-frontend || true
             docker rm blog-backend || true
-            docker rmi blog-frontend || true
-            docker rmi blog-backend || true
+            docker rmi vudinh2025/bloghomnay-fe:latest || true
+            docker rmi vudinh2025/bloghomnay:latest || true
 
             docker run -d --name blog-backend \
               -p 3000:3000 \
@@ -55,5 +58,5 @@ jobs:
               vudinh2025/bloghomnay:latest
 
             docker run -d --name blog-frontend \
-              -p 80:80 \
+              -p 80:80 -p 443:443 \
               vudinh2025/bloghomnay-fe:latest
