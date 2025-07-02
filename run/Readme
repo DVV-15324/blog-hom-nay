@@ -31,5 +31,5 @@ docker run -d --name blog-backend \
     vudinh2025/bloghomnay:latest
 
 docker run -d --name blog-frontend \
-    -p 80:80 \
+    -p 80:80 -p 443:443 \
     vudinh2025/bloghomnay-fe:latest
