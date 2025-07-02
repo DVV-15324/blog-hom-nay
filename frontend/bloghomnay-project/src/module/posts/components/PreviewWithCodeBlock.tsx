@@ -1,13 +1,20 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import parse, { HTMLReactParserOptions, Element } from "html-react-parser";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface Props {
     content: string;
+    onRendered?: () => void;
 }
 
-const PreviewWithCodeBlock: FC<Props> = ({ content }) => {
+const PreviewWithCodeBlock: FC<Props> = ({ content, onRendered }) => {
+    const ref = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (onRendered) {
+            onRendered(); // Báo hiệu đã render xong
+        }
+    }, [content]);
     const options: HTMLReactParserOptions = {
         replace: (domNode) => {
             if (
@@ -49,7 +56,7 @@ const PreviewWithCodeBlock: FC<Props> = ({ content }) => {
     };
 
     return (
-        <div className="prose max-w-none ql-editor" style={{ whiteSpace: "pre-wrap" }}>
+        <div ref={ref} className="prose max-w-none ql-editor" style={{ whiteSpace: "pre-wrap" }}>
             {parse(content, options)}
         </div>
     );

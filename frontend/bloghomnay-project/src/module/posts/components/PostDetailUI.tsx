@@ -77,27 +77,13 @@ const PostsDetail = () => {
     const [isLike, setIsLike] = useState<boolean>(false);
     const [tocList, setTocList] = useState<TOCItem[]>([]);
     const [activeId, setActiveId] = useState<string | null>(null);
+    const [isContentReady, setIsContentReady] = useState(false);
+
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                for (let entry of entries) {
-                    if (entry.isIntersecting) {
-                        setActiveId(entry.target.id);
-                        break;
-                    }
-                }
-            },
-            {
-                rootMargin: "0px 0px -85% 0px", // quan trọng! phát hiện khi heading nằm trong khoảng trên
-                threshold: 0.1,
-            }
-        );
-
-        const elements = document.querySelectorAll("h1, h2, h3");
-        elements.forEach((el) => observer.observe(el));
-
-        return () => observer.disconnect();
-    }, []);
+        if (isContentReady && tocList.length > 0 && !activeId) {
+            setActiveId(tocList[0].id);
+        }
+    }, [isContentReady, tocList, activeId]);
 
     useEffect(() => {
         if (posts?.content) {
@@ -154,6 +140,30 @@ const PostsDetail = () => {
     useEffect(() => {
         handleGetPostById();
     }, [id]);
+
+    useEffect(() => {
+        if (!isContentReady) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (let entry of entries) {
+                    if (entry.isIntersecting) {
+                        setActiveId(entry.target.id);
+                        break;
+                    }
+                }
+            },
+            {
+                rootMargin: "0px 0px -80% 0px",
+                threshold: 0.1,
+            }
+        );
+
+        const headings = document.querySelectorAll("h1, h2, h3");
+        headings.forEach((el) => observer.observe(el));
+
+        return () => observer.disconnect();
+    }, [isContentReady]);
 
 
 
@@ -231,7 +241,11 @@ const PostsDetail = () => {
                             <div className="rounded-xl shadow p-5 bg-white mb-6 border border-gray-200">
                                 {/*<h2 className="text-xl font-semibold mb-2 text-black">{title}</h2>*/}
                                 <div className="text-gray-700 mb-3 ">
-                                    <PreviewWithCodeBlock content={addIdToHeadings(content)} />
+                                    <PreviewWithCodeBlock
+                                        content={addIdToHeadings(content)}
+                                        onRendered={() => setIsContentReady(true)}
+                                    />
+
 
                                 </div>
 
@@ -258,7 +272,9 @@ const PostsDetail = () => {
 
                         </div >
                         <div className="hidden xl:col-span-1 xl:block">
-                            <div className="fixed top-24 mt-6 w-64 max-h-[400px] overflow-y-auto p-4 bg-white rounded-md border border-gray-200 shadow">
+                            <div
+                                className="fixed top-24 mt-6 w-64 p-4 bg-white rounded-md border border-gray-200 shadow overflow-y-auto max-h-[400px]"
+                            >
                                 <h3 className="text-lg font-semibold mb-2 text-gray-800 text-center">Mục lục</h3>
                                 <ul className="space-y-1 text-sm">
                                     {tocList.map((item) => (
@@ -270,11 +286,11 @@ const PostsDetail = () => {
                                                         target.scrollIntoView({ behavior: 'smooth' });
                                                     }
                                                 }}
-                                                className={`block w-full text-left px-2 py-1 rounded hover:underline${item.tag === 'h2' ? 'pl-4' : item.tag === 'h3' ? 'pl-6' : 'pl-2'}${activeId === item.id
-                                                    ? 'border-l-4 border-red-500 bg-red-50 font-semibold text-red-600'
-                                                    : 'border-l-4 border-transparent text-blue-600'
-                                                    }
-                                                        `}
+                                                className={`block w-full text-left px-2 py-1 rounded hover:underline cursor-pointer ${item.tag === 'h2' ? 'pl-4' : item.tag === 'h3' ? 'pl-6' : 'pl-2'
+                                                    } ${activeId === item.id
+                                                        ? 'border-l-4 border-red-500 bg-red-50 font-semibold text-red-600'
+                                                        : 'border-l-4 border-transparent text-blue-600'
+                                                    }`}
                                             >
                                                 {item.text}
                                             </button>
@@ -282,6 +298,7 @@ const PostsDetail = () => {
                                     ))}
                                 </ul>
                             </div>
+
                         </div>
 
 
