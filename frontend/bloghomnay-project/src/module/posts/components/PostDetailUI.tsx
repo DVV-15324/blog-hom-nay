@@ -273,7 +273,7 @@ const PostsDetail = () => {
                         </div >
                         <div className="hidden xl:col-span-1 xl:block">
                             <div
-                                className="fixed top-24 mt-6 w-64 p-4 bg-white rounded-md border border-gray-200 shadow overflow-y-auto max-h-[400px]"
+                                className="fixed top-24 mt-9 w-64 p-4 bg-white rounded-md border border-gray-200 shadow overflow-y-auto max-h-[400px]"
                             >
                                 <h3 className="text-lg font-semibold mb-2 text-gray-800 text-center">Mục lục</h3>
                                 <ul className="space-y-1 text-sm">
