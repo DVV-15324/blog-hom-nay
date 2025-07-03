@@ -17,7 +17,6 @@ const fields: Field[] = ["name", "email", "phone", "address"];
 type Option = { value: string; label: string };
 type AddressRow = {
     ProvinceName: string;
-    DistrictName: string;
     WardName: string;
 };
 
@@ -38,14 +37,12 @@ export const ProfileUI = () => {
     // Dữ liệu CSV địa chỉ
     const [rawData, setRawData] = useState<AddressRow[]>([]);
 
-    // Các cấp chọn tỉnh/huyện/xã dạng option
+    // Các cấp chọn tỉnh/xã dạng option
     const [provinces, setProvinces] = useState<Option[]>([]);
-    const [districtsMap, setDistrictsMap] = useState<Record<string, Option[]>>({});
     const [wardsMap, setWardsMap] = useState<Record<string, Option[]>>({});
 
     // Giá trị đang chọn cho address
     const [selectedProvince, setSelectedProvince] = useState<Option | null>(null);
-    const [selectedDistrict, setSelectedDistrict] = useState<Option | null>(null);
     const [selectedWard, setSelectedWard] = useState<Option | null>(null);
 
     // Load CSV 1 lần lúc mount
@@ -62,7 +59,6 @@ export const ProfileUI = () => {
             });
     }, []);
 
-
     // Khi rawData thay đổi, build danh sách các cấp địa chỉ
     useEffect(() => {
         // Danh sách tỉnh duy nhất
@@ -72,27 +68,18 @@ export const ProfileUI = () => {
         }));
         setProvinces(uniqueProvinces);
 
-        // Map huyện theo tỉnh
-        const distMap: Record<string, Set<string>> = {};
-        rawData.forEach(({ ProvinceName, DistrictName }) => {
-            if (!distMap[ProvinceName]) distMap[ProvinceName] = new Set();
-            distMap[ProvinceName].add(DistrictName);
-        });
-        const distOptionMap: Record<string, Option[]> = {};
-        Object.entries(distMap).forEach(([province, districtsSet]) => {
-            distOptionMap[province] = Array.from(districtsSet).map((d) => ({ value: d, label: d }));
-        });
-        setDistrictsMap(distOptionMap);
-
-        // Map xã theo huyện
+        // Map xã theo tỉnh (bỏ huyện)
         const wardMap: Record<string, Set<string>> = {};
-        rawData.forEach(({ DistrictName, WardName }) => {
-            if (!wardMap[DistrictName]) wardMap[DistrictName] = new Set();
-            wardMap[DistrictName].add(WardName);
+        rawData.forEach(({ ProvinceName, WardName }) => {
+            if (!wardMap[ProvinceName]) wardMap[ProvinceName] = new Set();
+            wardMap[ProvinceName].add(WardName);
         });
         const wardOptionMap: Record<string, Option[]> = {};
-        Object.entries(wardMap).forEach(([district, wardsSet]) => {
-            wardOptionMap[district] = Array.from(wardsSet).map((w) => ({ value: w, label: w }));
+        Object.entries(wardMap).forEach(([province, wardsSet]) => {
+            wardOptionMap[province] = Array.from(wardsSet).map((w) => ({
+                value: w,
+                label: w,
+            }));
         });
         setWardsMap(wardOptionMap);
     }, [rawData]);
@@ -102,29 +89,20 @@ export const ProfileUI = () => {
         if (!values.address) return;
 
         const parts = values.address.split(" - ").map((p) => p.trim());
-        if (parts.length === 3) {
-            const [wardName, districtName, provinceName] = parts;
+        if (parts.length === 2) {
+            const [wardName, provinceName] = parts;
 
             const provinceOpt = provinces.find((p) => p.value === provinceName);
             setSelectedProvince(provinceOpt || null);
 
-            const districtOpt = districtsMap[provinceName]?.find((d) => d.value === districtName) || null;
-            setSelectedDistrict(districtOpt);
-
-            const wardOpt = wardsMap[districtName]?.find((w) => w.value === wardName) || null;
+            const wardOpt = wardsMap[provinceName]?.find((w) => w.value === wardName) || null;
             setSelectedWard(wardOpt);
         }
-    }, [values.address, provinces, districtsMap, wardsMap]);
+    }, [values.address, provinces, wardsMap]);
 
     // Cập nhật các state khi chọn địa chỉ
     const onProvinceChange = (option: Option | null) => {
         setSelectedProvince(option);
-        setSelectedDistrict(null);
-        setSelectedWard(null);
-    };
-
-    const onDistrictChange = (option: Option | null) => {
-        setSelectedDistrict(option);
         setSelectedWard(null);
     };
 
@@ -134,13 +112,13 @@ export const ProfileUI = () => {
 
     // Xây dựng address string chuẩn
     const buildAddress = () => {
-        if (!selectedProvince || !selectedDistrict || !selectedWard) return "";
-        return `${selectedWard.label} - ${selectedDistrict.label} - ${selectedProvince.label}`;
+        if (!selectedProvince || !selectedWard) return "";
+        return `${selectedWard.label} - ${selectedProvince.label}`;
     };
 
     // Lưu địa chỉ
     const saveAddress = async () => {
-        if (!selectedProvince || !selectedDistrict || !selectedWard) {
+        if (!selectedProvince || !selectedWard) {
             enqueueSnackbar("Vui lòng chọn đủ địa chỉ", { variant: "warning" });
             return;
         }
@@ -158,9 +136,7 @@ export const ProfileUI = () => {
         }
     };
 
-    const [avatarPreview, setAvatarPreview] = useState<string | null>(
-        profile?.avatar.String || null
-    );
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(profile?.avatar.String || null);
 
     // Ref để trigger input file
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -194,7 +170,6 @@ export const ProfileUI = () => {
         }
     };
 
-
     if (!profile) return <div className="text-gray-500">Đang tải thông tin người dùng...</div>;
 
     const RenderField = ({ field }: { field: Field }) => {
@@ -208,7 +183,6 @@ export const ProfileUI = () => {
                 {isEditing && editable ? (
                     field === "address" ? (
                         <>
-
                             <Select
                                 options={provinces}
                                 value={selectedProvince}
@@ -218,16 +192,7 @@ export const ProfileUI = () => {
                             />
                             {selectedProvince && (
                                 <Select
-                                    options={districtsMap[selectedProvince.value] || []}
-                                    value={selectedDistrict}
-                                    onChange={onDistrictChange}
-                                    placeholder="Chọn quận/huyện"
-                                    isClearable
-                                />
-                            )}
-                            {selectedDistrict && (
-                                <Select
-                                    options={wardsMap[selectedDistrict.value] || []}
+                                    options={wardsMap[selectedProvince.value] || []}
                                     value={selectedWard}
                                     onChange={onWardChange}
                                     placeholder="Chọn phường/xã"
@@ -235,10 +200,7 @@ export const ProfileUI = () => {
                                 />
                             )}
 
-                            <button
-                                onClick={saveAddress}
-                                className="text-green-600 hover:text-green-800 mt-2 w-20"
-                            >
+                            <button onClick={saveAddress} className="text-green-600 hover:text-green-800 mt-2 w-20">
                                 <Save size={20} />
                             </button>
                         </>
@@ -282,13 +244,7 @@ export const ProfileUI = () => {
                     <Camera size={20} className="text-blue-600" />
                 </div>
 
-                <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    className="hidden"
-                    onChange={onAvatarChange}
-                />
+                <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={onAvatarChange} />
             </div>
 
             {fields.map((field) => (
