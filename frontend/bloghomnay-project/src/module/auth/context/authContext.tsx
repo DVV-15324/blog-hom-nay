@@ -26,7 +26,6 @@ type AuthContextType = {
     handleLogin: (data: LoginType) => Promise<void>
     handleRegister: (data: RegisterType) => Promise<void>
     handleProfile: () => Promise<void>
-
     handleOut: () => void
 }
 
@@ -36,7 +35,6 @@ export const AuthContext = createContext<AuthContextType>({
     handleLogin: async () => { },
     handleRegister: async () => { },
     handleProfile: async () => { },
-
     handleOut: () => { },
 })
 
@@ -59,8 +57,9 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
             setProfile(null)
             setLoading(false)
             localStorage.removeItem("access_token")
-            const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
-            enqueueSnackbar(err.message, { variant: "error" });
+            // Bỏ enqueueSnackbar lỗi ở đây
+            // const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
+            // enqueueSnackbar(err.message, { variant: "error" });
         }
     }, [])
 
@@ -73,22 +72,22 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
                 }
                 setLoading(false)
             } catch (error) {
-                const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
-                enqueueSnackbar(err.message, { variant: "error" });
+                // Bỏ enqueueSnackbar lỗi ở đây
+                // const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
+                // enqueueSnackbar(err.message, { variant: "error" });
                 setLoading(false)
             }
         })()
     }, [handleProfile])
-
 
     const handleLogin = async (data: LoginType) => {
         try {
             const token = await ApiLogin<Response<ResponseLoginType>>(data);
             const accessToken = token?.data?.access_token.token;
 
-            if (!accessToken) {
-                throw new Error("Dữ liệu token không hợp lệ từ server.");
-            }
+            // if (!accessToken) {
+            //   throw new Error("Dữ liệu token không hợp lệ từ server.");
+            //}
 
             localStorage.setItem("access_token", accessToken);
             enqueueSnackbar("Đăng nhập thành công!", { variant: "success" });
@@ -97,18 +96,18 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
 
             navigate("/");
         } catch (error) {
+            // Bỏ enqueueSnackbar lỗi ở đây
             const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
             enqueueSnackbar(err.message, { variant: "error" });
         }
     };
-
-
 
     const handleRegister = async (data: RegisterType) => {
         try {
             await ApiRegister<Response<boolean>>(data)
             navigate("/login")
         } catch (error) {
+            // Bỏ enqueueSnackbar lỗi ở đây
             const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
             enqueueSnackbar(err.message, { variant: "error" });
         }
@@ -117,8 +116,8 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
     const handleOut = async () => {
         setProfile(null)
         localStorage.removeItem("access_token")
-
     }
+
     return (
         <AuthContext.Provider
             value={{
@@ -127,12 +126,10 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
                 handleLogin,
                 handleRegister,
                 handleProfile,
-
                 handleOut,
             }}
         >
             {children}
         </AuthContext.Provider>
     );
-
 }
