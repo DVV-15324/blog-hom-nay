@@ -41,7 +41,7 @@ func CheckLastName(lastName string) error {
 func CheckAddress(address string) error {
 	splitAddress := strings.Split(address, "-")
 	//ví dụ: Xã Lãng Ngâm - Huyện Gia Bình - Tỉnh Bắc Ninh
-	err := common.Checkprovince(splitAddress[2], splitAddress[1], splitAddress[0])
+	err := common.Checkprovince(splitAddress[1], splitAddress[0])
 	if err != nil {
 		return ErrorAddressNotValid
 	}

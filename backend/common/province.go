@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func Checkprovince(province string, district string, ward string) error {
+func Checkprovince(province string, ward string) error {
 	dir, _ := os.Getwd()
 	data, err := os.Open(fmt.Sprintf("%s%s", dir, "/common/province/province.csv"))
 	if err != nil {
@@ -19,7 +19,7 @@ func Checkprovince(province string, district string, ward string) error {
 		return err
 	}
 	for _, d := range records {
-		if d[2] == ward && d[1] == district && d[0] == province {
+		if d[1] == ward && d[0] == province {
 			return nil
 		}
 	}
