@@ -7,7 +7,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { HeartUI } from "./Heart"
 import { CommentBox } from "./Comments"
 import { Response } from "../../common/model";
-import { ApiGetPostById, ApiGetPostByIdP, ApiGetPostByUser, ApiSearchPost } from "../services/api";
+import { ApiGetPostById, ApiGetPostByIdP, ApiGetPostByUserPublic, ApiSearchPost } from "../services/api";
 import TableOfContents, { TOCItem } from "./TableOfContents"; // đường dẫn điều chỉnh cho đúng
 
 import { useHookAuth } from "../../auth/hooks/authHooks";
@@ -147,6 +147,7 @@ const PostsDetail = () => {
             setPostsTags(res.data);
 
         } catch (error) {
+
             const err = ErrorHandle(error as AxiosError);
             enqueueSnackbar(err.message, { variant: "error" });
         } finally {
@@ -160,12 +161,13 @@ const PostsDetail = () => {
 
     const handleGetPostByUser = async () => {
         try {
-
-            const res = await ApiGetPostByUser<Response<PostResponse[]>>();
+            if (!post?.user_id) return
+            const res = await ApiGetPostByUserPublic<Response<PostResponse[]>>({ id: post.user_id });
             setPosts(res.data);
         } catch (error) {
-            // const err = ErrorHandle(error as AxiosError);
-            //enqueueSnackbar(err.message, { variant: "error" });
+
+            const err = ErrorHandle(error as AxiosError);
+            enqueueSnackbar(err.message, { variant: "error" });
         } finally {
             setLoading(false);
         }

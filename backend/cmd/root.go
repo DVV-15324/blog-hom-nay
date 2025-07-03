@@ -62,6 +62,7 @@ func StartService(r *gin.Engine) {
 	postV1.POST("/get_post_categories_id/:categories-id", comp.ApiPost.ApiGetPostByCategories())
 	postV1.POST("/get_post_id_p/:post-id", comp.ApiPost.ApiGetPostById())
 	postV1.POST("/get_post_tag", comp.ApiPost.ApiSearch())
+	postV1.POST("/get_post_user_id_other/:id", comp.ApiPost.ApiGetPostByUserOtherId())
 
 	postV2 := v2.Group("post").Use(middleware.RequiredAuth(comp.BzIntrospect))
 	postV2.POST("/get_post_user_id", comp.ApiPost.ApiGetPostByUserId())

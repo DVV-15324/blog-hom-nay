@@ -26,6 +26,7 @@ type AuthContextType = {
     handleLogin: (data: LoginType) => Promise<void>
     handleRegister: (data: RegisterType) => Promise<void>
     handleProfile: () => Promise<void>
+
     handleOut: () => void
 }
 
@@ -35,6 +36,7 @@ export const AuthContext = createContext<AuthContextType>({
     handleLogin: async () => { },
     handleRegister: async () => { },
     handleProfile: async () => { },
+
     handleOut: () => { },
 })
 
@@ -57,9 +59,8 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
             setProfile(null)
             setLoading(false)
             localStorage.removeItem("access_token")
-            // Bỏ enqueueSnackbar lỗi ở đây
-            // const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
-            // enqueueSnackbar(err.message, { variant: "error" });
+            const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
+            enqueueSnackbar(err.message, { variant: "error" });
         }
     }, [])
 
@@ -72,13 +73,13 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
                 }
                 setLoading(false)
             } catch (error) {
-                // Bỏ enqueueSnackbar lỗi ở đây
-                // const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
-                // enqueueSnackbar(err.message, { variant: "error" });
+                const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
+                enqueueSnackbar(err.message, { variant: "error" });
                 setLoading(false)
             }
         })()
     }, [handleProfile])
+
 
     const handleLogin = async (data: LoginType) => {
         try {
@@ -96,18 +97,18 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
 
             navigate("/");
         } catch (error) {
-            // Bỏ enqueueSnackbar lỗi ở đây
             const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
             enqueueSnackbar(err.message, { variant: "error" });
         }
     };
+
+
 
     const handleRegister = async (data: RegisterType) => {
         try {
             await ApiRegister<Response<boolean>>(data)
             navigate("/login")
         } catch (error) {
-            // Bỏ enqueueSnackbar lỗi ở đây
             const err = ErrorHandle(error as Error | AxiosError<ErrorResponse>);
             enqueueSnackbar(err.message, { variant: "error" });
         }
@@ -116,8 +117,8 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
     const handleOut = async () => {
         setProfile(null)
         localStorage.removeItem("access_token")
-    }
 
+    }
     return (
         <AuthContext.Provider
             value={{
@@ -126,10 +127,12 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
                 handleLogin,
                 handleRegister,
                 handleProfile,
+
                 handleOut,
             }}
         >
             {children}
         </AuthContext.Provider>
     );
+
 }

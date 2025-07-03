@@ -66,6 +66,7 @@ type ApiPosts interface {
 	ApiSearch() func(c *gin.Context)
 	//ApiGetPostByTitles() func(c *gin.Context)
 	ApiGetPostByUserId() func(c *gin.Context)
+	ApiGetPostByUserOtherId() func(c *gin.Context)
 	ApiUpdatePost() func(c *gin.Context)
 }
 type ApiTag interface {

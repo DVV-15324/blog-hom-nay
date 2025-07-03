@@ -103,3 +103,9 @@ export const ApiDeletePost = async <T>(data: { id: string }): Promise<T> => {
     const response: AxiosResponse<T> = await axiosInstance.post(`/v2/post/delete_post/${data.id}`)
     return response.data
 }
+
+
+export const ApiGetPostByUserPublic = async <T>(data: { id: string }): Promise<T> => {
+    const response: AxiosResponse<T> = await axiosInstance.post(`/v2/post/get_post_user_id_other/${data.id}`)
+    return response.data
+}
