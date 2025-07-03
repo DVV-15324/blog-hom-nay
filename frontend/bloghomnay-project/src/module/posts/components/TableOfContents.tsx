@@ -11,16 +11,11 @@ interface TableOfContentsProps {
     tocList: TOCItem[];
     activeId: string | null;
 
+
 }
 
 const TableOfContents: React.FC<TableOfContentsProps> = ({ tocList, activeId }) => {
-    useEffect(() => {
-        console.log("=== TOC List ===");
-        tocList.forEach(({ id, text, tag }) => {
-            console.log(`ID: ${id}, Text: ${text}, Tag: ${tag}`);
-        });
-        console.log("Active ID:", activeId);
-    }, [tocList, activeId]);
+
 
     return (
         <nav
@@ -41,6 +36,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ tocList, activeId }) 
                         <li key={id}>
                             <button
                                 onClick={() => {
+
                                     const el = document.getElementById(id);
                                     if (el) {
                                         el.scrollIntoView({ behavior: "smooth" });

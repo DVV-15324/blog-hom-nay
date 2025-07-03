@@ -24,6 +24,7 @@ function extractTOCFromHTML(html: string): TOCItem[] {
     const doc = parser.parseFromString(html, "text/html");
 
     const headings = Array.from(doc.querySelectorAll("h1, h2, h3"));
+
     let tocIndex = 0;
 
     return headings
@@ -101,7 +102,7 @@ const PostsDetail = () => {
         if (isContentReady && tocList.length > 0 && !activeId) {
             setActiveId(tocList[0].id);
         }
-    }, [isContentReady, tocList, activeId]);
+    }, [isContentReady, tocList]);
 
     useEffect(() => {
         if (post?.content) {
@@ -163,8 +164,8 @@ const PostsDetail = () => {
             const res = await ApiGetPostByUser<Response<PostResponse[]>>();
             setPosts(res.data);
         } catch (error) {
-            const err = ErrorHandle(error as AxiosError);
-            enqueueSnackbar(err.message, { variant: "error" });
+            // const err = ErrorHandle(error as AxiosError);
+            //enqueueSnackbar(err.message, { variant: "error" });
         } finally {
             setLoading(false);
         }
@@ -391,4 +392,4 @@ const PostsDetail = () => {
     );
 };
 
-export default PostsDetail;
+export default PostsDetail; 
