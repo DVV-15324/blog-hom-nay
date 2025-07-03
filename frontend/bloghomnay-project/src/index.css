@@ -56,3 +56,10 @@ html {
   scroll-padding-top: 110px;
   /* hoặc giá trị bằng chiều cao của thanh điều hướng cố định */
 }
+
+
+html,
+body,
+#root {
+  overflow-x: hidden;
+}

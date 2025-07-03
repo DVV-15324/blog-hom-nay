@@ -10,11 +10,15 @@ import { Response } from "../../common/model";
 import { ApiGetPostById, ApiGetPostByIdP, ApiGetPostByUserPublic, ApiSearchPost } from "../services/api";
 import TableOfContents, { TOCItem } from "./TableOfContents"; // đường dẫn điều chỉnh cho đúng
 
+import useMediaQuery from '@mui/material/useMediaQuery';
+
+
 import { useHookAuth } from "../../auth/hooks/authHooks";
 import { Helmet } from 'react-helmet';
 import PreviewWithCodeBlock from "./PreviewWithCodeBlock";
 import AddDetailsPost from "./AddDetailsPost";
 import AddDetailsPostTags from "./AddDetailsPosstTags";
+import { useTheme } from "@mui/material/styles";
 
 
 
@@ -82,6 +86,41 @@ export const DefaultLoading = () => (
         <CircularProgress />
     </div>
 );
+
+
+interface PostListProps<T> {
+    posts: T[];
+    RenderItem: React.ComponentType<{ post: T }>;
+}
+
+
+
+const PostList = <T,>({ posts, RenderItem }: PostListProps<T>) => {
+    const theme = useTheme();
+    const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+
+    return (
+        <div className="w-full mt-10">
+            <div
+                className={`${isSmall
+                    ? "flex flex-col space-y-4 px-2" // dọc, cách nhau 16px (space-y-4)
+                    : "grid grid-cols-3 gap-4 mb-10"
+                    }`}
+            >
+                {posts.map((post) => (
+                    <div
+                        key={(post as any).id}
+                        className={`${isSmall ? "w-full" : ""}`}
+                    >
+                        <RenderItem post={post} />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+
 
 const PostsDetail = () => {
     const { profile } = useHookAuth();
@@ -163,6 +202,7 @@ const PostsDetail = () => {
         try {
             if (!post?.user_id) return
             const res = await ApiGetPostByUserPublic<Response<PostResponse[]>>({ id: post.user_id });
+
             setPosts(res.data);
         } catch (error) {
 
@@ -174,8 +214,12 @@ const PostsDetail = () => {
     };
 
     useEffect(() => {
-        handleGetPostByUser();
-    }, []);
+        if (post?.user_id) {
+            handleGetPostByUser();
+        }
+    }, [post]);
+
+
     const handleGetPostById = async () => {
         if (!lastString) return;
         try {
@@ -319,24 +363,12 @@ const PostsDetail = () => {
                                 <CommentBox initialComments={post.comments} postId={post.id} />
 
                             </div >
-                            <div className="w-full overflow-x-auto mt-20">
-                                <div className="flex flex-nowrap gap-4 px-4 py-2 min-w-max">
-                                    {postsTag.map((post) => (
-                                        <div key={post.id} className="flex-shrink-0 w-[350px]">
-                                            <AddDetailsPostTags post={post} />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="w-full overflow-x-auto">
-                                <div className="flex flex-nowrap gap-4 px-4 py-2 min-w-max">
-                                    {posts.map((post) => (
-                                        <div key={post.id} className="flex-shrink-0 w-[350px]">
-                                            <AddDetailsPost post={post} />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                            <PostList posts={postsTag} RenderItem={AddDetailsPostTags} />
+                            <PostList posts={posts} RenderItem={AddDetailsPost} />
+
+
+
+
 
                         </div >
 
