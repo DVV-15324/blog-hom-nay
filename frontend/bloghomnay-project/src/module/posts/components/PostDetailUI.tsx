@@ -7,43 +7,58 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { HeartUI } from "./Heart"
 import { CommentBox } from "./Comments"
 import { Response } from "../../common/model";
-import { ApiGetPostById, ApiGetPostByIdP } from "../services/api";
+import { ApiGetPostById, ApiGetPostByIdP, ApiGetPostByUser, ApiSearchPost } from "../services/api";
+import TableOfContents, { TOCItem } from "./TableOfContents"; // đường dẫn điều chỉnh cho đúng
 
 import { useHookAuth } from "../../auth/hooks/authHooks";
 import { Helmet } from 'react-helmet';
 import PreviewWithCodeBlock from "./PreviewWithCodeBlock";
+import AddDetailsPost from "./AddDetailsPost";
+import AddDetailsPostTags from "./AddDetailsPosstTags";
 
 
-interface TOCItem {
-    id: string;
-    text: string;
-    tag: "h1" | "h2" | "h3";
-}
+
 
 function extractTOCFromHTML(html: string): TOCItem[] {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
     const headings = Array.from(doc.querySelectorAll("h1, h2, h3"));
-    return headings.map((heading, index) => {
+    let tocIndex = 0;
 
-        const id = `heading-${index}`;
-        heading.setAttribute("id", id); // Thêm id để link tới
-        return {
-            id,
-            text: heading.textContent || "",
-            tag: heading.tagName.toLowerCase() as "h1" | "h2" | "h3",
-        };
-    });
+    return headings
+        .filter((heading) =>
+            heading.textContent?.trim() &&
+            !heading.querySelector("pre")
+
+        )
+        .map((heading) => {
+            const id = `heading-${tocIndex++}`;
+            return {
+                id,
+                text: heading.textContent!.trim(),
+                tag: heading.tagName.toLowerCase() as "h1" | "h2" | "h3",
+            };
+        });
 }
+
 
 function addIdToHeadings(html: string): string {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
-    const headings = Array.from(doc.querySelectorAll("h1, h2, h3"));
 
-    headings.forEach((heading, index) => {
-        heading.setAttribute("id", `heading-${index}`);
+    const headings = Array.from(doc.querySelectorAll("h1, h2, h3"));
+    let validIndex = 0;
+
+    headings.forEach((heading) => {
+        const hasPre = heading.querySelector("pre");
+
+        const hasText = heading.textContent?.trim();
+
+        if (!hasPre && hasText) {
+            heading.setAttribute("id", `heading-${validIndex}`);
+            validIndex++;
+        }
     });
 
     return doc.body.innerHTML;
@@ -70,7 +85,7 @@ export const DefaultLoading = () => (
 const PostsDetail = () => {
     const { profile } = useHookAuth();
     const { id } = useParams();
-    const [posts, setPosts] = useState<PostResponse>();
+    const [post, setPost] = useState<PostResponse>();
     const [loading, setLoading] = useState<boolean>(true);
     const [likeCount, setLikeCount] = useState<number>(0);
     const navigate = useNavigate();
@@ -78,6 +93,9 @@ const PostsDetail = () => {
     const [tocList, setTocList] = useState<TOCItem[]>([]);
     const [activeId, setActiveId] = useState<string | null>(null);
     const [isContentReady, setIsContentReady] = useState(false);
+    const [posts, setPosts] = useState<PostResponse[]>([]);
+    const [postsTag, setPostsTags] = useState<PostResponse[]>([]);
+
 
     useEffect(() => {
         if (isContentReady && tocList.length > 0 && !activeId) {
@@ -86,19 +104,22 @@ const PostsDetail = () => {
     }, [isContentReady, tocList, activeId]);
 
     useEffect(() => {
-        if (posts?.content) {
-            const htmlWithIds = addIdToHeadings(posts.content);
+        if (post?.content) {
+            const htmlWithIds = addIdToHeadings(post.content);
             const list = extractTOCFromHTML(htmlWithIds);
             setTocList(list);
         }
-    }, [posts?.content]);
-
+    }, [post?.content]);
     useEffect(() => {
-        if (posts) {
-            setLikeCount(posts.like);
-            setIsLike(posts.islike);
+        if (!post) return;
+        handleGetPostByTags();
+    }, [post]);
+    useEffect(() => {
+        if (post) {
+            setLikeCount(post.like);
+            setIsLike(post.islike);
         }
-    }, [posts]);
+    }, [post]);
 
     const getLastString = (str: string): string => {
         const parts = str.split("-");
@@ -108,26 +129,60 @@ const PostsDetail = () => {
     const lastString = id ? getLastString(id) : null;
 
     useEffect(() => {
-        if (posts) {
-            setLikeCount(posts.like);
+        if (post) {
+            setLikeCount(post.like);
         }
-    }, [posts]);
+    }, [post]);
 
     const handleProfileOthers = (e: React.MouseEvent) => {
         e.stopPropagation();
-        navigate(`/user/${posts?.user_id}`);
+        navigate(`/user/${post?.user_id}`);
+    };
+    const handleGetPostByTags = async () => {
+        try {
+            if (post == null) return
+            const tagNames = post.tags.map(tag => `[${tag.name}]`).join(" ");
+            const res = await ApiSearchPost<Response<PostResponse[]>>(tagNames);
+            setPostsTags(res.data);
+
+        } catch (error) {
+            const err = ErrorHandle(error as AxiosError);
+            enqueueSnackbar(err.message, { variant: "error" });
+        } finally {
+            setLoading(false);
+        }
     };
 
+    useEffect(() => {
+        handleGetPostByTags();
+    }, []);
+
+    const handleGetPostByUser = async () => {
+        try {
+
+            const res = await ApiGetPostByUser<Response<PostResponse[]>>();
+            setPosts(res.data);
+        } catch (error) {
+            const err = ErrorHandle(error as AxiosError);
+            enqueueSnackbar(err.message, { variant: "error" });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        handleGetPostByUser();
+    }, []);
     const handleGetPostById = async () => {
         if (!lastString) return;
         try {
             if (!id) return;
             if (profile != null) {
                 const res = await ApiGetPostById<Response<PostResponse>>(lastString);
-                setPosts(res.data);
+                setPost(res.data);
             }
             const res = await ApiGetPostByIdP<Response<PostResponse>>(lastString);
-            setPosts(res.data);
+            setPost(res.data);
 
         } catch (error) {
             const err = ErrorHandle(error as AxiosError);
@@ -142,33 +197,26 @@ const PostsDetail = () => {
     }, [id]);
 
     useEffect(() => {
-        if (!isContentReady) return;
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                for (let entry of entries) {
-                    if (entry.isIntersecting) {
-                        setActiveId(entry.target.id);
-                        break;
-                    }
-                }
-            },
-            {
-                rootMargin: "0px 0px -80% 0px",
-                threshold: 0.1,
+        const onScroll = () => {
+            const headings = Array.from(document.querySelectorAll("h1, h2, h3")) as HTMLElement[];
+            const scrollPos = window.scrollY + 120; // tùy chỉnh offset
+            let currentId = "";
+            for (let heading of headings) {
+                if (heading.offsetTop <= scrollPos) {
+                    currentId = heading.id;
+                } else break;
             }
-        );
+            if (currentId !== activeId) setActiveId(currentId);
+        };
 
-        const headings = document.querySelectorAll("h1, h2, h3");
-        headings.forEach((el) => observer.observe(el));
-
-        return () => observer.disconnect();
-    }, [isContentReady]);
-
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
 
 
 
-    if (!posts) {
+
+    if (!post) {
         return
     }
 
@@ -179,13 +227,13 @@ const PostsDetail = () => {
         //title,
         content,
         tags,
-    } = posts;
+    } = post;
 
     return (
         <>
             <Helmet>
-                <title>{posts.title} | BlogHomNay</title>
-                <meta name="description" content={posts.description} />
+                <title>{post.title} | BlogHomNay</title>
+                <meta name="description" content={post.description} />
             </Helmet>
 
             {loading ? (
@@ -215,7 +263,7 @@ const PostsDetail = () => {
                                         <div className="flex justify-center items-center">
                                             <HeartUI
                                                 isLike={isLike}
-                                                postId={posts.id}
+                                                postId={post.id}
                                                 onLikeChange={(liked) => {
                                                     setIsLike(liked);
                                                     setLikeCount((prev) => liked ? prev + 1 : prev - 1);
@@ -245,8 +293,6 @@ const PostsDetail = () => {
                                         content={addIdToHeadings(content)}
                                         onRendered={() => setIsContentReady(true)}
                                     />
-
-
                                 </div>
 
 
@@ -267,37 +313,38 @@ const PostsDetail = () => {
                                         : "Chưa cập nhật"}
                                 </div>
 
-                                <CommentBox initialComments={posts.comments} postId={posts.id} />
+                                <CommentBox initialComments={post.comments} postId={post.id} />
+
                             </div >
+                            <div className="w-full overflow-x-auto mt-20">
+                                <div className="flex flex-nowrap gap-4 px-4 py-2 min-w-max">
+                                    {postsTag.map((post) => (
+                                        <div key={post.id} className="flex-shrink-0 w-[350px]">
+                                            <AddDetailsPostTags post={post} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="w-full overflow-x-auto">
+                                <div className="flex flex-nowrap gap-4 px-4 py-2 min-w-max">
+                                    {posts.map((post) => (
+                                        <div key={post.id} className="flex-shrink-0 w-[350px]">
+                                            <AddDetailsPost post={post} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
 
                         </div >
+
+
                         <div className="hidden xl:col-span-1 xl:block">
-                            <div
-                                className="fixed top-24 mt-9 w-64 p-4 bg-white rounded-md border border-gray-200 shadow overflow-y-auto max-h-[400px]"
-                            >
-                                <h3 className="text-lg font-semibold mb-2 text-gray-800 text-center">Mục lục</h3>
-                                <ul className="space-y-1 text-sm">
-                                    {tocList.map((item) => (
-                                        <li key={item.id}>
-                                            <button
-                                                onClick={() => {
-                                                    const target = document.getElementById(item.id);
-                                                    if (target) {
-                                                        target.scrollIntoView({ behavior: 'smooth' });
-                                                    }
-                                                }}
-                                                className={`block w-full text-left px-2 py-1 rounded hover:underline cursor-pointer ${item.tag === 'h2' ? 'pl-4' : item.tag === 'h3' ? 'pl-6' : 'pl-2'
-                                                    } ${activeId === item.id
-                                                        ? 'border-l-4 border-red-500 bg-red-50 font-semibold text-red-600'
-                                                        : 'border-l-4 border-transparent text-blue-600'
-                                                    }`}
-                                            >
-                                                {item.text}
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                            <TableOfContents
+                                tocList={tocList}
+                                activeId={activeId}
+
+                            />
+
 
                         </div>
 
@@ -319,7 +366,7 @@ const PostsDetail = () => {
                                 </div>
                                 <div className="text-center">
                                     <div className="flex justify-center items-center">
-                                        <HeartUI width={30} height={30} isLike={posts.islike} postId={posts.id} onLikeChange={(liked) => {
+                                        <HeartUI width={30} height={30} isLike={post.islike} postId={post.id} onLikeChange={(liked) => {
                                             setLikeCount((prev) => liked ? prev + 1 : prev - 1);
                                         }} />
                                     </div>

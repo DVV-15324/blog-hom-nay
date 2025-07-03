@@ -16,10 +16,11 @@ const ItemPost: React.FC<Props> = ({ post }) => {
         navigate(`/user/${post.user_id}`);
     };
     return (
-        <div className="container mx-auto px-4 flex justify-center items-center">
-            <div className="rounded-xl shadow p-5 bg-white mb-6 border border-gray-200 transition hover:shadow-xl hover:scale-[1.005] duration-300 cursor-pointer" onClick={() => {
-                handleClick()
-            }}>
+        <div className="max-w-5xl container mx-auto px-4 flex justify-center items-center">
+            <div
+                className="relative w-4xl  m-2 rounded-2xl shadow-md p-4 bg-white border border-gray-200 hover:shadow-lg transition cursor-pointer group flex flex-col justify-between"
+                onClick={handleClick}
+            >
                 <div className="flex items-center gap-4 mb-4" onClick={handleProfileOthers}>
                     <img
                         src={post.user.avatar.String || "/av.png"}
@@ -33,7 +34,7 @@ const ItemPost: React.FC<Props> = ({ post }) => {
                 </div>
 
                 <h2 className="text-xl font-semibold mb-2  text-black">{post.title}</h2>
-                <p className="text-sm mb-2 text-black">{post.description}</p>
+                <p className="text-sm mb-2 text-black line-clamp-3 mb-2 break-words">{post.description}</p>
 
                 <div className="flex flex-wrap gap-2 mt-2">
                     {post.tags.map((tag) => (
