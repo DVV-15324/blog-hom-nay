@@ -6,7 +6,8 @@ import (
 	"database/sql"
 )
 
-func (t *PostServiceSQL) SearchPostsByPriority(ctx context.Context, keyword string) ([]entity.Posts, error) {
+// Tìm kiếm post qua tiêu đề title
+func (t *PostServiceSQL) GetPostByTitles(ctx context.Context, keyword string) ([]entity.Posts, error) {
 	query := `SELECT 
 		p.id, 
 		p.user_id, 
