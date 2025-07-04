@@ -32,7 +32,11 @@ import (
 	apiTag "bloghomnay-project/services/transport/api/tag"
 	apiUser "bloghomnay-project/services/transport/api/user"
 	"context"
+	"fmt"
+	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/microsoft/go-mssqldb"
 
 	"github.com/gin-gonic/gin"
@@ -108,7 +112,13 @@ type ApiServer struct {
 
 func ComposerService() *ApiServer {
 	db, _ := connectdb.Connectdb()
-	redisClient := InitRedis("localhost:6379", "", 0)
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Warning: Error loading .env file, using default or env vars")
+	}
+
+	host := os.Getenv("DB_HOST")
+	redisClient := InitRedis(fmt.Sprintf("%s:6379", host), "", 0)
 	//repon
 	rAuth := responsitoryAuth.NewAuthServiceSQL(db)
 	rUser := responsitoryUser.NewUserServiceSQL(db)
