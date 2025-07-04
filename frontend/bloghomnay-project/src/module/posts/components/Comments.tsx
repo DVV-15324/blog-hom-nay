@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { enqueueSnackbar } from "notistack";
 import { CommentBase, CreateCommentPayload } from "../models/post";
 import { ApiCreateComment } from "../services/api";
@@ -16,6 +16,10 @@ export const CommentBox = ({ postId, initialComments = [] }: CommentBoxProps) =>
     const [commentList, setCommentList] = useState<CommentBase[]>(initialComments ?? []);
     const { profile } = useHookAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setCommentList(initialComments ?? []);
+    }, [postId, initialComments]);
 
     const handleSubmit = async () => {
         if (!content.trim()) {
