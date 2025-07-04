@@ -6,8 +6,7 @@ import (
 	"database/sql"
 )
 
-// Tìm kiếm post qua tiêu đề title
-func (t *PostServiceSQL) GetPostByTitles(ctx context.Context, title string) ([]entity.Posts, error) {
+func (t *PostServiceSQL) SearchPostsByPriority(ctx context.Context, keyword string) ([]entity.Posts, error) {
 	query := `SELECT 
 		p.id, 
 		p.user_id, 
@@ -20,32 +19,43 @@ func (t *PostServiceSQL) GetPostByTitles(ctx context.Context, title string) ([]e
 		p.slug,
 		p.created_at,
 		p.updated_at
-		FROM posts AS p
-		LEFT JOIN post_likes AS pl ON pl.post_id = p.id
-		LEFT JOIN comments AS c ON c.post_id = p.id
-		WHERE p.content LIKE @title
-		GROUP BY 
-			p.id, p.user_id, p.category_id, p.description, p.title, p.content, p.slug, p.created_at, p.updated_at;`
-	likePattern := "%" + title + "%" // Tìm tiêu đề chứa từ khóa
+	FROM posts AS p
+	LEFT JOIN post_likes AS pl ON pl.post_id = p.id
+	LEFT JOIN comments AS c ON c.post_id = p.id
+	WHERE 
+		p.title LIKE @q OR 
+		p.description LIKE @q OR 
+		p.content LIKE @q
+	GROUP BY 
+		p.id, p.user_id, p.category_id, p.description, p.title, p.content, p.slug, p.created_at, p.updated_at
+	ORDER BY 
+		CASE 
+			WHEN p.title LIKE @q THEN 1
+			WHEN p.description LIKE @q THEN 2
+			WHEN p.content LIKE @q THEN 3
+			ELSE 4
+		END,
+		p.created_at DESC;`
 
-	rows, err := t.db.QueryContext(ctx, query, sql.Named("title", likePattern))
+	pattern := "%" + keyword + "%"
+	rows, err := t.db.QueryContext(ctx, query, sql.Named("q", pattern))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var listPosts []entity.Posts
+	var posts []entity.Posts
 	for rows.Next() {
-		var data entity.Posts
-		if err := rows.Scan(&data.Id, &data.UserID, &data.CategoryId, &data.Description, &data.Title, &data.Content, &data.Like, &data.CountComment, &data.Slug, &data.CreatedAt, &data.UpdatedAt); err != nil {
+		var p entity.Posts
+		if err := rows.Scan(&p.Id, &p.UserID, &p.CategoryId, &p.Description, &p.Title, &p.Content, &p.Like, &p.CountComment, &p.Slug, &p.CreatedAt, &p.UpdatedAt); err != nil {
 			return nil, err
 		}
-		listPosts = append(listPosts, data)
+		posts = append(posts, p)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return listPosts, nil
+	return posts, nil
 }
