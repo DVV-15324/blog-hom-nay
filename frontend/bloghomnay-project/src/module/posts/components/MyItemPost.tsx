@@ -63,7 +63,10 @@ const MyItemPost: React.FC<Props> = ({ post, onDelete }) => {
         }
     };
 
-
+    const handleTagClick = (e: React.MouseEvent, tagName: string) => {
+        e.stopPropagation();
+        navigate(`/search?q=${encodeURIComponent(`[${tagName}]`)}`);
+    };
     return (
         <>
             {loading && <DefaultLoading />}
@@ -97,6 +100,7 @@ const MyItemPost: React.FC<Props> = ({ post, onDelete }) => {
                             <span
                                 key={tag.id}
                                 className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full"
+                                onClick={(e) => handleTagClick(e, tag.name)}
                             >
                                 #{tag.name}
                             </span>

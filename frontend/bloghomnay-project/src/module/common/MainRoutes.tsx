@@ -15,8 +15,12 @@ import { SearchUI } from "../posts/components/SearchPostUI"
 import { NotFound } from "./ErrorUI"
 import UpdatePost from "../posts/components/UpdatePost"
 import { OverViewPostUI } from "../posts/components/OverViewPostUI"
-import PostsDetail from "../posts/components/PostDetailUI"
+
 import { ProfileUI } from "../user/components/ProfileUI"
+
+
+import { PostDetailWrapper } from "./PostDetailWrapper"
+
 
 export const MainRoutes = () => {
     return (
@@ -54,8 +58,8 @@ export const MainRoutes = () => {
                 <Route path="/" element={<HomeUI />} />
                 <Route path="post/categories/:id" element={<PostUI />} />
                 <Route path="search" element={<SearchUI />} />
-                <Route path="post/:id" element={<PostsDetail />} />
 
+                <Route path="/post/:id" element={<PostDetailWrapper key={location.pathname} />} />
             </Route>
 
             {/* Private Routes - cần đăng nhập */}

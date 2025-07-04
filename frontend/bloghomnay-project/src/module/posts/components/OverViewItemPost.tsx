@@ -11,6 +11,10 @@ const OverViewItemPost: React.FC<Props> = ({ post }) => {
     const handleClick = () => {
         navigate(`/post/${post.slug}`);
     };
+    const handleTagClick = (e: React.MouseEvent, tagName: string) => {
+        e.stopPropagation();
+        navigate(`/search?q=${encodeURIComponent(`[${tagName}]`)}`);
+    };
     return (
         <div className="container mx-auto px-4 flex justify-center items-center">
             <div
@@ -26,6 +30,7 @@ const OverViewItemPost: React.FC<Props> = ({ post }) => {
                         <span
                             key={tag.id}
                             className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full"
+                            onClick={(e) => handleTagClick(e, tag.name)}
                         >
                             #{tag.name}
                         </span>

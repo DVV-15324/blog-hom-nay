@@ -1,16 +1,25 @@
 import { Search } from 'lucide-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const ISearchComponent = () => {
     const navigate = useNavigate();
-    const [query, setQuery] = useState<string>("")
+    const [searchParams] = useSearchParams();
 
-    const encodedString = encodeURIComponent(query);
+    // Lấy query từ URL, nếu không có thì rỗng
+    const urlQuery = searchParams.get('q') || '';
+
+    // State query nội bộ, khởi tạo từ urlQuery
+    const [query, setQuery] = useState<string>(urlQuery);
+
+    // Đồng bộ state query khi URL thay đổi (vd: khi bấm tag thay đổi URL)
+    useEffect(() => {
+        setQuery(urlQuery);
+    }, [urlQuery]);
 
     const handleSearch = () => {
-        navigate(`/search?q=${encodedString}`, { replace: true });
-
+        if (!query.trim()) return;
+        navigate(`/search?q=${encodeURIComponent(query)}`, { replace: true });
     };
 
     return (
@@ -31,14 +40,14 @@ const ISearchComponent = () => {
                     onClick={handleSearch}
                     disabled={!query.trim()}
                     className={`px-2 text-black rounded cursor-pointer transition hover:shadow-xl hover:scale-[1.02] duration-300
-        ${!query.trim() ? "opacity-50 cursor-not-allowed" : ""}
-    `}
+                        ${!query.trim() ? "opacity-50 cursor-not-allowed" : ""}
+                    `}
                 >
                     <Search />
                 </button>
-
             </div>
         </div>
     );
 };
-export default ISearchComponent
+
+export default ISearchComponent;

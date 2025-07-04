@@ -15,6 +15,12 @@ const ItemPost: React.FC<Props> = ({ post }) => {
         e.stopPropagation();
         navigate(`/user/${post.user_id}`);
     };
+
+    const handleTagClick = (e: React.MouseEvent, tagName: string) => {
+        e.stopPropagation();
+        navigate(`/search?q=${encodeURIComponent(`[${tagName}]`)}`);
+    };
+
     return (
         <div className="max-w-5xl container mx-auto px-4 flex justify-center items-center">
             <div
@@ -41,6 +47,7 @@ const ItemPost: React.FC<Props> = ({ post }) => {
                         <span
                             key={tag.id}
                             className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full"
+                            onClick={(e) => handleTagClick(e, tag.name)}
                         >
                             #{tag.name}
                         </span>
@@ -51,7 +58,7 @@ const ItemPost: React.FC<Props> = ({ post }) => {
                     Cập nhật lúc: {new Date(post.updated_at).toLocaleString()}
                 </div>
             </div >
-        </div>
+        </div >
     );
 };
 
