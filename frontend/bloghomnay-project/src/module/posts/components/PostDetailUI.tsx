@@ -89,21 +89,23 @@ export const DefaultLoading = () => (
 
 
 interface PostListProps<T> {
+    titleContent: string;
     posts: T[];
     RenderItem: React.ComponentType<{ post: T }>;
 }
 
 
 
-const PostList = <T,>({ posts, RenderItem }: PostListProps<T>) => {
+const PostList = <T,>({ posts, RenderItem, titleContent }: PostListProps<T>) => {
     const theme = useTheme();
     const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
     return (
         <div className="w-full mt-10">
+            <h2 className="text-black font-bold mb-2">{titleContent}</h2>
             <div
                 className={`${isSmall
-                    ? "flex flex-col space-y-4 px-2" // dọc, cách nhau 16px (space-y-4)
+                    ? "flex flex-col space-y-4" // dọc, cách nhau 16px (space-y-4)
                     : "grid grid-cols-3 gap-4 mb-10"
                     }`}
             >
@@ -290,7 +292,7 @@ const PostsDetail = () => {
 
             ) : posts ? (
                 <div className="container mx-auto px-4 flex justify-center items-center">
-                    <div className="grid xl:grid-cols-5 h-full w-full gap-4 px-4 py-10">
+                    <div className="grid xl:grid-cols-5 h-full w-full gap-4 py-10">
                         {/* Sidebar trái cố định */}
                         <aside className="xl:col-span-1 hidden xl:block">
                             <div className="sticky top-24 flex flex-col w-full items-end gap-4 xl:mt-20" >
@@ -363,12 +365,8 @@ const PostsDetail = () => {
                                 <CommentBox initialComments={post.comments} postId={post.id} />
 
                             </div >
-                            <PostList posts={postsTag} RenderItem={AddDetailsPostTags} />
-                            <PostList posts={posts} RenderItem={AddDetailsPost} />
-
-
-
-
+                            <PostList posts={postsTag} RenderItem={AddDetailsPostTags} titleContent={"Bài viết cùng tags"} />
+                            <PostList posts={posts} RenderItem={AddDetailsPost} titleContent={"Bài blog của người viết"} />
 
                         </div >
 
