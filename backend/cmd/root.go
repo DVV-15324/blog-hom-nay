@@ -3,12 +3,12 @@ package command
 import (
 	"bloghomnay-project/composer"
 	"bloghomnay-project/middleware"
-	"fmt"
+
 	"log"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+
 	"github.com/spf13/cobra"
 )
 
@@ -20,8 +20,7 @@ var root = &cobra.Command{
 		if err != nil {
 			log.Fatal("Error loading .env file")
 		}
-		port_api := os.Getenv("PORT_REST_API")
-		fmt.Println(port_api)
+
 		g := gin.Default()
 		g.Use(middleware.Cors())
 		StartService(g)

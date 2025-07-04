@@ -7,6 +7,11 @@ import (
 	"context"
 )
 
+type BzRedis interface {
+	SaveProfile(ctx context.Context, data *entityUser.Users) error
+	GetProfile(ctx context.Context, userID string) (string, error)
+}
+
 type ReponsitoryAuth interface {
 	CreateAuth(cxt context.Context, auth *entityAuth.Auth) error
 	GetAuthByEmail(ctx context.Context, email string) (*entityAuth.Auth, error)
@@ -19,6 +24,7 @@ type Hash interface {
 
 type BzUser interface {
 	BzCreateUser(ctx context.Context, cu *entityUser.CreateUserForm) (int, *common.AppError)
+	BzGetUsersById(ctx context.Context, id int) (*entityUser.Users, *common.AppError)
 }
 
 type JwtService interface {
@@ -27,17 +33,19 @@ type JwtService interface {
 }
 
 type BusinessAuth struct {
-	jwt    JwtService
-	bzUser BzUser
-	hash   Hash
-	bzAuth ReponsitoryAuth
+	jwt     JwtService
+	bzUser  BzUser
+	hash    Hash
+	bzAuth  ReponsitoryAuth
+	bzRedis BzRedis
 }
 
-func NewBusinessAuth(jwt JwtService, bzUser BzUser, h Hash, bzAuth ReponsitoryAuth) *BusinessAuth {
+func NewBusinessAuth(jwt JwtService, bzUser BzUser, h Hash, bzAuth ReponsitoryAuth, bzRedis BzRedis) *BusinessAuth {
 	return &BusinessAuth{
-		jwt:    jwt,
-		bzUser: bzUser,
-		hash:   h,
-		bzAuth: bzAuth,
+		jwt:     jwt,
+		bzUser:  bzUser,
+		hash:    h,
+		bzAuth:  bzAuth,
+		bzRedis: bzRedis,
 	}
 }

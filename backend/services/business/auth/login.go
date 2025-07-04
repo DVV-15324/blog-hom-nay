@@ -4,6 +4,8 @@ import (
 	"bloghomnay-project/common"
 	entityAuth "bloghomnay-project/services/entity/auth"
 	"context"
+
+	"log"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -33,5 +35,14 @@ func (bz *BusinessAuth) LoginAuth(ctx context.Context, au *entityAuth.LoginForm)
 	sub := s.ToBase58()
 	tid := uuid.New().String()
 	token := bz.jwt.IssueToken(ctx, sub, tid)
+
+	user, err_u := bz.bzUser.BzGetUsersById(ctx, auth.UserId)
+	if err_u != nil {
+		return nil, err_u
+	}
+
+	if err := bz.bzRedis.SaveProfile(ctx, user); err != nil {
+		log.Printf("Lỗi lưu profile vào Redis: %v", err)
+	}
 	return token, nil
 }

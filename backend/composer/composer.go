@@ -9,6 +9,7 @@ import (
 	bzOthers "bloghomnay-project/services/business/others"
 	bzPost "bloghomnay-project/services/business/post"
 	bzPostLike "bloghomnay-project/services/business/postlike"
+	bzRedis "bloghomnay-project/services/business/redis"
 	bzTag "bloghomnay-project/services/business/tag"
 	bzUser "bloghomnay-project/services/business/user"
 	responsitoryAuth "bloghomnay-project/services/reponsitory/auth"
@@ -107,7 +108,7 @@ type ApiServer struct {
 
 func ComposerService() *ApiServer {
 	db, _ := connectdb.Connectdb()
-
+	redisClient := InitRedis("localhost:6379", "", 0)
 	//repon
 	rAuth := responsitoryAuth.NewAuthServiceSQL(db)
 	rUser := responsitoryUser.NewUserServiceSQL(db)
@@ -122,7 +123,8 @@ func ComposerService() *ApiServer {
 	jwt := common.NewJwtServer("vu-dep-trai-nhat-the-gioi", 604800)
 	hash := new(common.Hash)
 	bzUser := bzUser.NewBusinessUser(rUser)
-	bzAuth := bzAuth.NewBusinessAuth(jwt, bzUser, hash, rAuth)
+	bzRedis := bzRedis.NewBusinessRedis(redisClient)
+	bzAuth := bzAuth.NewBusinessAuth(jwt, bzUser, hash, rAuth, bzRedis)
 	bzTag := bzTag.NewBusinessTag(rTag, rPostTag)
 	bzPostLike := bzPostLike.NewBusinessPostLike(rPostLike)
 	bzCategories := bzCategories.NewBusinessCategories(rCategories)
