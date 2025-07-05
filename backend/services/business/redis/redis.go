@@ -4,6 +4,8 @@ import (
 	entityUser "bloghomnay-project/services/entity/user"
 	"context"
 	"encoding/json"
+	"log"
+
 	"github.com/redis/go-redis/v9"
 )
 
@@ -17,7 +19,6 @@ func NewBusinessRedis(redisC *redis.Client) *BusinessRedis {
 	}
 }
 
-// SaveProfile lưu dữ liệu user dưới dạng JSON vào Redis với key "profile:<userID>"
 func (bz *BusinessRedis) SaveProfile(ctx context.Context, data *entityUser.Users) error {
 	jsonData, err := json.Marshal(data)
 	if err != nil {
@@ -25,6 +26,10 @@ func (bz *BusinessRedis) SaveProfile(ctx context.Context, data *entityUser.Users
 	}
 
 	key := "profile:" + data.FakeId
+
+	log.Println("Đang lưu profile vào Redis với key:", key)
+	log.Println("Dữ liệu JSON:", string(jsonData))
+
 	return bz.redisC.Set(ctx, key, jsonData, 0).Err()
 }
 
