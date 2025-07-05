@@ -14,7 +14,7 @@ const ListPost: React.FC<Props> = ({ posts }) => {
     }
 
     return (
-        <div className="p-4">
+        <div className="xl:p-4">
             {safePosts.map((post) => (
                 <ItemPost key={post.id} post={post} />
             ))}

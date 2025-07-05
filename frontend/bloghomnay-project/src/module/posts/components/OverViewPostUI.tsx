@@ -75,11 +75,11 @@ export const OverViewPostUI = () => {
     return loading ? (
         <DefaultLoading />
     ) : (
-        <div className="xl:grid xl:grid-cols-5 h-full w-full gap-4 px-4 py-10">
+        <div className="xl:grid xl:grid-cols-5 h-full w-full gap-4 xl:px-4 py-10">
             <div></div>
 
             <div className="col-span-3 bg-stone-50 rounded text-white items-center justify-center p-6">
-                <div className="container mx-auto px-4 flex justify-center items-center">
+                <div className="container mx-auto xl:px-4 flex justify-center items-center">
                     <div className="flex flex-col xl:flex-row gap-6 mb-6 items-center justify-start border-b border-gray-300 pb-6">
                         <img
                             src={profileOver?.avatar.String || "/av.png"}

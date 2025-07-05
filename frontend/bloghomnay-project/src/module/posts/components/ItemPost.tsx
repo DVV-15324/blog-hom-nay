@@ -24,7 +24,7 @@ const ItemPost: React.FC<Props> = ({ post }) => {
     };
 
     return (
-        <div className="max-w-5xl container mx-auto px-4 flex justify-center items-center">
+        <div className="max-w-5xl container mx-auto xl:px-4 flex justify-center items-center">
             <div
                 className="relative w-4xl  m-2 rounded-2xl shadow-md p-4 bg-white border border-gray-200 hover:shadow-lg transition cursor-pointer group flex flex-col justify-between"
                 onClick={handleClick}

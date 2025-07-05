@@ -16,7 +16,7 @@ const OverViewItemPost: React.FC<Props> = ({ post }) => {
         navigate(`/search?q=${encodeURIComponent(`[${tagName}]`)}`);
     };
     return (
-        <div className="container mx-auto px-4 flex justify-center items-center">
+        <div className="container mx-auto xl:px-4 flex justify-center items-center">
             <div
                 className="relative w-4xl  m-2 rounded-2xl shadow-md p-4 bg-white border border-gray-200 hover:shadow-lg transition cursor-pointer group flex flex-col justify-between"
                 onClick={handleClick}

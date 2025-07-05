@@ -14,7 +14,7 @@ const OverViewListPost: React.FC<Props> = ({ posts }) => {
     }
 
     return (
-        <div className="p-4 h-full">
+        <div className="xl:p-4 h-full">
 
             {safePosts.map((post) => (
                 <OverViewItemPost key={post.id} post={post} />

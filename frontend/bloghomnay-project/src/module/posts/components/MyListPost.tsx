@@ -24,13 +24,13 @@ const MyListPost: React.FC<Props> = ({ posts }) => {
     }
 
     return (
-        <div className="p-4">
-            <div className="p-4 h-full">
-                {listPost.map((post) => (
-                    <MyItemPost key={post.id} post={post} onDelete={handleDeletePost} />
-                ))}
-            </div>
+
+        <div className="xl:p-4 h-full">
+            {listPost.map((post) => (
+                <MyItemPost key={post.id} post={post} onDelete={handleDeletePost} />
+            ))}
         </div>
+
     );
 };
 
