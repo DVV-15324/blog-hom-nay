@@ -29,10 +29,6 @@ func (bz *BusinessAuth) LoginWithGoogle(ctx context.Context, input *entityAuth.G
 			Email:    email,
 			TypeAuth: "google",
 		}
-		if err := bz.bzAuth.CreateAuth(ctx, authEntity); err != nil {
-			return nil, common.NewAppError(500, "Không thể tạo auth", err)
-		}
-
 		id, err := bz.bzUser.BzCreateUser(ctx, &entityUser.CreateUserForm{
 			Email:     email,
 			FirstName: name,
@@ -44,7 +40,10 @@ func (bz *BusinessAuth) LoginWithGoogle(ctx context.Context, input *entityAuth.G
 		}
 
 		authEntity.UserId = id
-		auth = authEntity
+		if err := bz.bzAuth.CreateAuth(ctx, authEntity); err != nil {
+			return nil, common.NewAppError(500, "Không thể tạo auth", err)
+		}
+
 	}
 
 	// Tạo token
