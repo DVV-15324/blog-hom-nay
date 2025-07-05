@@ -14,7 +14,7 @@ const GoogleLoginButton = () => {
     useEffect(() => {
         if (window.google) {
             window.google.accounts.id.initialize({
-                client_id: "101056890896-juf44u6lie9efhl0vpuj6qp5allhi3le.apps.googleusercontent.com",
+                client_id: "101056890896-k2a2c4u0ga85ie1kk1gul45qcmedvqnf.apps.googleusercontent.com",
                 callback: handleCredentialResponse,
             });
 
