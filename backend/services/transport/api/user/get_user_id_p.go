@@ -6,10 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (api *ApiUser) ApiGetUserById() func(c *gin.Context) {
+func (api *ApiUser) ApiGetUserByIdPublic() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		//uid := common.DecodeFromBase58(id)
-		id := common.GetRequestContext(c.Request.Context()).GetSub()
+		id := c.Param("id")
 		uid := common.DecodeFromBase58(id)
 		user, er := api.bz.BzGetUsersById(c, int(uid.LocalID))
 		if er != nil {

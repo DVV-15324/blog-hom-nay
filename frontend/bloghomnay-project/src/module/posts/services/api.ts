@@ -22,8 +22,8 @@ export const ApiGetPostByIdP = async <T>(id: string): Promise<T> => {
 }
 
 
-export const ApiGetPostByUser = async <T>(): Promise<T> => {
-    const response: AxiosResponse<T> = await axiosInstance.post(`/v2/post/get_post_user_id`)
+export const ApiGetPostByUser = async <T>(id: string): Promise<T> => {
+    const response: AxiosResponse<T> = await axiosInstance.post(`/v1/post/get_post_user_id/${id}`)
     return response.data
 }
 
@@ -104,8 +104,3 @@ export const ApiDeletePost = async <T>(data: { id: string }): Promise<T> => {
     return response.data
 }
 
-
-export const ApiGetPostByUserPublic = async <T>(data: { id: string }): Promise<T> => {
-    const response: AxiosResponse<T> = await axiosInstance.post(`/v1/post/get_post_user_id_other/${data.id}`)
-    return response.data
-}

@@ -7,7 +7,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { HeartUI } from "./Heart"
 import { CommentBox } from "./Comments"
 import { Response } from "../../common/model";
-import { ApiGetPostById, ApiGetPostByIdP, ApiGetPostByUserPublic, ApiSearchPost } from "../services/api";
+import { ApiGetPostById, ApiGetPostByIdP, ApiGetPostByUser, ApiSearchPost } from "../services/api";
 import TableOfContents, { TOCItem } from "./TableOfContents"; // đường dẫn điều chỉnh cho đúng
 
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -19,6 +19,7 @@ import PreviewWithCodeBlock from "./PreviewWithCodeBlock";
 import AddDetailsPost from "./AddDetailsPost";
 import AddDetailsPostTags from "./AddDetailsPosstTags";
 import { useTheme } from "@mui/material/styles";
+import { ConvertProfileToString, GetLastString } from "../../common/profile.slug.ts";
 
 
 
@@ -163,12 +164,7 @@ const PostsDetail = () => {
         }
     }, [post]);
 
-    const getLastString = (str: string): string => {
-        const parts = str.split("-");
-        return parts[parts.length - 1];
-    };
-
-    const lastString = id ? getLastString(id) : null;
+    const lastString = id ? GetLastString(id) : null;
 
     useEffect(() => {
         if (post) {
@@ -178,7 +174,9 @@ const PostsDetail = () => {
 
     const handleProfileOthers = (e: React.MouseEvent) => {
         e.stopPropagation();
-        navigate(`/user/${post?.user_id}`);
+        if (!post) return;
+        const url = ConvertProfileToString({ first_name: post.user.first_name, last_name: post.user.last_name, id: post.user.user_id })
+        navigate(`/user/${url}`);
     };
     const handleGetPostByTags = async () => {
         try {
@@ -203,7 +201,7 @@ const PostsDetail = () => {
     const handleGetPostByUser = async () => {
         try {
             if (!post?.user_id) return
-            const res = await ApiGetPostByUserPublic<Response<PostResponse[]>>({ id: post.user_id });
+            const res = await ApiGetPostByUser<Response<PostResponse[]>>(post.user_id);
 
             setPosts(res.data);
         } catch (error) {
@@ -302,10 +300,11 @@ const PostsDetail = () => {
                                         src={user?.avatar.String || "/av.png"}
                                         alt={user?.first_name}
                                         className="w-20 h-20 rounded-full object-cover shadow cursor-pointer"
+                                        onClick={handleProfileOthers}
                                     />
 
 
-                                    <h2 className="text-xl font-semibold text-gray-800 cursor-pointer" onClick={handleProfileOthers}>
+                                    <h2 className="text-xl font-semibold text-gray-800" >
                                         {user?.first_name} {user?.last_name}
                                     </h2>
                                     <div className="my-2 ">
@@ -390,6 +389,7 @@ const PostsDetail = () => {
                                     src={user?.avatar.String || "/av.png"}
                                     alt={user?.first_name}
                                     className="w-10 h-10 rounded-full object-cover shadow"
+                                    onClick={handleProfileOthers}
                                 />
 
                                 <div className="text-center">

@@ -54,6 +54,7 @@ type ApiUser interface {
 	ApiGetUserById() func(c *gin.Context)
 	ApiGetUserBySDT() func(c *gin.Context)
 	ApiUpdateUser() func(c *gin.Context)
+	ApiGetUserByIdPublic() func(c *gin.Context)
 }
 type ApiCategories interface {
 	ApiCreateCategories() func(c *gin.Context)
@@ -71,7 +72,7 @@ type ApiPosts interface {
 	ApiSearch() func(c *gin.Context)
 	//ApiGetPostByTitles() func(c *gin.Context)
 	ApiGetPostByUserId() func(c *gin.Context)
-	ApiGetPostByUserOtherId() func(c *gin.Context)
+
 	ApiUpdatePost() func(c *gin.Context)
 }
 type ApiTag interface {

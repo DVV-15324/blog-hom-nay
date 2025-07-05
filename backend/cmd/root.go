@@ -41,10 +41,12 @@ func StartService(r *gin.Engine) {
 
 	v2 := r.Group("v2")
 	v2.Use(middleware.Cors())
+	userV1 := v1.Group("user")
+	userV1.POST("/get_user_id_p/:id", comp.ApiUser.ApiGetUserByIdPublic())
 
 	userV2 := v2.Group("user").Use(middleware.RequiredAuth(comp.BzIntrospect))
-	userV2.POST("/get_user_sdt", comp.ApiUser.ApiGetUserBySDT())
 	userV2.POST("/get_user_id", comp.ApiUser.ApiGetUserById())
+	userV2.POST("/get_user_sdt", comp.ApiUser.ApiGetUserBySDT())
 	userV2.POST("/delete_user_id", comp.ApiUser.ApiDeleteUser())
 	userV2.POST("/update_user_id", comp.ApiUser.ApiUpdateUser())
 
@@ -61,10 +63,9 @@ func StartService(r *gin.Engine) {
 	postV1.POST("/get_post_categories_id/:categories-id", comp.ApiPost.ApiGetPostByCategories())
 	postV1.POST("/get_post_id_p/:post-id", comp.ApiPost.ApiGetPostById())
 	postV1.POST("/get_post_tag", comp.ApiPost.ApiSearch())
-	postV1.POST("/get_post_user_id_other/:id", comp.ApiPost.ApiGetPostByUserOtherId())
+	postV1.POST("/get_post_user_id/:id", comp.ApiPost.ApiGetPostByUserId())
 
 	postV2 := v2.Group("post").Use(middleware.RequiredAuth(comp.BzIntrospect))
-	postV2.POST("/get_post_user_id", comp.ApiPost.ApiGetPostByUserId())
 	postV2.POST("/get_post_id/:post-id", comp.ApiPost.ApiGetPostById())
 	postV2.POST("/create_post", comp.ApiPost.ApiCreatePost())
 	postV2.POST("/delete_post/:post-id", comp.ApiPost.ApiDeletePost())

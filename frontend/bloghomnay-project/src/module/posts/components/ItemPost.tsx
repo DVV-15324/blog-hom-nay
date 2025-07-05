@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { PostResponse } from "../../posts/models/post";
+import { ConvertProfileToString } from "../../common/profile.slug.ts";
 
 
 type Props = {
@@ -13,7 +14,8 @@ const ItemPost: React.FC<Props> = ({ post }) => {
     };
     const handleProfileOthers = (e: React.MouseEvent) => {
         e.stopPropagation();
-        navigate(`/user/${post.user_id}`);
+        const url = ConvertProfileToString({ first_name: post.user.first_name, last_name: post.user.last_name, id: post.user.user_id })
+        navigate(`/user/${url}`);
     };
 
     const handleTagClick = (e: React.MouseEvent, tagName: string) => {

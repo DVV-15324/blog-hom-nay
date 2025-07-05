@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { PostResponse } from "../../posts/models/post";
+import { ConvertProfileToString } from "../../common/profile.slug.ts";
 
 type Props = {
     post: PostResponse;
@@ -7,26 +8,31 @@ type Props = {
 
 const AddDetailsPostTags: React.FC<Props> = ({ post }) => {
     const navigate = useNavigate();
-
+    const handleTagClick = (e: React.MouseEvent, tagName: string) => {
+        e.stopPropagation();
+        navigate(`/search?q=${encodeURIComponent(`[${tagName}]`)}`);
+    };
     const handleClick = () => {
         navigate(`/post/${post.slug}`);
     };
 
     const handleProfileOthers = (e: React.MouseEvent) => {
         e.stopPropagation();
-        navigate(`/user/${post.user_id}`);
+        const url = ConvertProfileToString({ first_name: post.user.first_name, last_name: post.user.last_name, id: post.user.user_id })
+        navigate(`/user/${url}`);
     };
 
     return (
         <div
-            className="rounded-2xl shadow-md p-4 bg-white border border-gray-200 hover:shadow-lg transition cursor-pointer flex flex-col justify-between h-full"
+            className="rounded-2xl shadow-md p-4 bg-white border border-gray-200 hover:shadow-lg transition flex flex-col justify-between h-full"
             onClick={handleClick}
         >
-            <div className="flex items-center gap-4 mb-4" onClick={handleProfileOthers}>
+            <div className="flex items-center gap-4 mb-4" >
                 <img
                     src={post.user.avatar.String || "/av.png"}
                     alt={post.user.first_name}
-                    className="w-10 h-10 rounded-full object-contain"
+                    className="w-10 h-10 rounded-full object-contain cursor-pointer"
+                    onClick={handleProfileOthers}
                 />
                 <div>
                     <div className="font-medium text-black">
@@ -45,7 +51,8 @@ const AddDetailsPostTags: React.FC<Props> = ({ post }) => {
                 {post.tags.map((tag) => (
                     <span
                         key={tag.id}
-                        className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full"
+                        className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full cursor-pointer"
+                        onClick={(e) => handleTagClick(e, tag.name)}
                     >
                         #{tag.name}
                     </span>

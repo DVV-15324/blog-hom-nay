@@ -4,7 +4,7 @@ import (
 	"bloghomnay-project/common"
 	entityPosts "bloghomnay-project/services/entity/posts"
 	"context"
-	"fmt"
+
 	"net/http"
 	"strings"
 	"unicode"
@@ -73,7 +73,7 @@ func (c *BusinessPost) BussinessSearchPost(ctx context.Context, search string) (
 	case len(tags) > 0 && len(keyword) > 0:
 		post, err = c.bzPost.SearchsPost(ctx, tags, keyword)
 	case len(tags) > 0:
-		fmt.Println("🔍 Search tag only")
+
 		post, err = c.bzPost.GetsPostByTagsName(ctx, tags)
 	case len(keyword) > 0:
 		post, err = c.bzPost.GetPostByTitles(ctx, keyword)

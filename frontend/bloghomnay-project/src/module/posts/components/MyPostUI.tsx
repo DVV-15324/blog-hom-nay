@@ -6,6 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { PostResponse } from "../models/post";
 import { ApiGetPostByUser } from "../services/api"; // Sửa lại API phù hợp
 import MyListPost from "./MyListPost";
+import { useHookAuth } from "../../auth/hooks/authHooks";
 
 
 // Hàm xử lý lỗi
@@ -32,11 +33,11 @@ export const DefaultLoading = () => {
 export const MyPostUI = () => {
     const [posts, setPosts] = useState<PostResponse[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-
+    const { profile } = useHookAuth()
     const handleGetPostByUser = async () => {
         try {
-
-            const res = await ApiGetPostByUser<Response<PostResponse[]>>();
+            if (!profile) return
+            const res = await ApiGetPostByUser<Response<PostResponse[]>>(profile?.id);
             setPosts(res.data);
         } catch (error) {
             const err = ErrorHandle(error as AxiosError);

@@ -8,6 +8,7 @@ import ISearchComponent from "./SearchComponent";
 import NotificationMUI from "./Notification";
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import CircularProgress from "@mui/material/CircularProgress";
+import { ConvertProfileToString } from "./profile.slug.ts";
 
 
 
@@ -20,6 +21,20 @@ const HeaderMain = ({ children }: HeaderMainProps) => {
     const [toggled, setToggled] = useState(false);
     const navigate = useNavigate();
 
+    const handleProfileOthers = (e: React.MouseEvent) => {
+        e.stopPropagation();
+
+
+        if (!profile) return;
+
+        const url = ConvertProfileToString({
+            first_name: profile.first_name,
+            last_name: profile.last_name,
+            id: profile.id,
+        });
+        console.log("Navigating to:", url);
+        navigate(`/user/${url}`);
+    };
 
     if (loading) {
         return (
@@ -57,7 +72,7 @@ const HeaderMain = ({ children }: HeaderMainProps) => {
                     </MenuItem>
                     <MenuItem
                         className="text-center hover:bg-gray-300 bg-gray-200 cursor-pointer rounded-sm text-xl text-green-900 underline"
-                        onClick={() => { navigate(`/user/${profile?.id!}`); }}
+                        onClick={(e) => { handleProfileOthers(e) }}
                     >
                         Trang hồ sơ
                     </MenuItem>
@@ -105,7 +120,7 @@ const HeaderMain = ({ children }: HeaderMainProps) => {
                         </div>
                         <div className="flex flex-1 xl:flex-2 justify-end items-center">
                             <a className="hidden xl:flex items-center justify-center p-2 m-1 h-[48px] hover:text-amber-700 cursor-pointer rounded-sm text-xl text-green-900" onClick={() => { window.location.href = "/"; }}>Trang chủ</a>
-                            <a className="hidden xl:flex items-center justify-center p-2 m-1 h-[48px] hover:text-amber-700 cursor-pointer rounded-sm text-xl text-green-900" onClick={() => { navigate(`/user/${profile?.id!}`); }}>Trang hồ sơ</a>
+                            <a className="hidden xl:flex items-center justify-center p-2 m-1 h-[48px] hover:text-amber-700 cursor-pointer rounded-sm text-xl text-green-900" onClick={(e) => { handleProfileOthers(e) }}>Trang hồ sơ</a>
                             <div className="hidden xl:flex">
                                 <NotificationMUI>
                                     Thông báo

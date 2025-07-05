@@ -58,7 +58,7 @@ export const MainRoutes = () => {
                 <Route path="/" element={<HomeUI />} />
                 <Route path="post/categories/:id" element={<PostUI />} />
                 <Route path="search" element={<SearchUI />} />
-
+                <Route path="user/:id" element={<OverViewPostUI />} />
                 <Route path="/post/:id" element={<PostDetailWrapper key={location.pathname} />} />
             </Route>
 
@@ -72,7 +72,7 @@ export const MainRoutes = () => {
                     </PrivateComponent>
                 }
             >
-                <Route path="user/:id" element={<OverViewPostUI />} />
+
                 <Route path="create_post" element={<CreatePostUI />} />
                 <Route path="profile" element={<ProfileUI />} />
                 <Route path="my_post" element={<MyPostUI />} />

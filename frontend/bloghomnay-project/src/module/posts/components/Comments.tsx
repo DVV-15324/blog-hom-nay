@@ -5,6 +5,7 @@ import { ApiCreateComment } from "../services/api";
 import { Response } from "../../common/model";
 import { useHookAuth } from "../../auth/hooks/authHooks";
 import { useNavigate } from "react-router-dom";
+import { ConvertProfileToString } from "../../common/profile.slug.ts";
 interface CommentBoxProps {
     postId: string;
     initialComments?: CommentBase[];
@@ -43,9 +44,10 @@ export const CommentBox = ({ postId, initialComments = [] }: CommentBoxProps) =>
         }
     };
 
-    const handleProfileOthers = (e: React.MouseEvent, user_id: string) => {
+    const handleProfileOthers = (e: React.MouseEvent, index: number) => {
         e.stopPropagation();
-        navigate(`/user/${user_id}`);
+        const url = ConvertProfileToString({ first_name: commentList[index].user.first_name, last_name: commentList[index].user.last_name, id: commentList[index].user.user_id })
+        navigate(`/user/${url}`);
     };
     return (
         <div className="bg-white rounded-xl p-4 shadow-sm">
@@ -75,13 +77,13 @@ export const CommentBox = ({ postId, initialComments = [] }: CommentBoxProps) =>
 
             {/* Danh sách bình luận */}
             <div className="mt-6 space-y-4">
-                {commentList.map((c) => (
+                {commentList.map((c, index) => (
                     <div key={c.id} className="flex items-start gap-3 border-b pb-4">
                         <img
                             src={c.user?.avatar?.String || "/av.png"}
                             alt={`${c.user?.first_name || ""} ${c.user?.last_name || ""}`}
                             className="w-10 h-10 rounded-full object-cover cursor-pointer"
-                            onClick={(e) => handleProfileOthers(e, c.user_id)}
+                            onClick={(e) => handleProfileOthers(e, index)}
 
                         />
                         <div className="flex-1">

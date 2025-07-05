@@ -14,8 +14,12 @@ export const ApiRegister = async <T>(data: RegisterType): Promise<T> => {
 }
 
 export const ApiProfile = async <T>(): Promise<T> => {
-    const response: AxiosResponse<T> = await axiosInstance.post("/v2/user/get_user_id")
+    const response: AxiosResponse<T> = await axiosInstance.post(`/v2/user/get_user_id`)
+    return response.data
+}
 
+export const ApiProfileP = async <T>(id: string): Promise<T> => {
+    const response: AxiosResponse<T> = await axiosInstance.post(`/v1/user/get_user_id_p/${id}`)
     return response.data
 }
 
