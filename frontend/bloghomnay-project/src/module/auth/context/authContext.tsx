@@ -132,7 +132,9 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
             navigate("/");
         } catch (err) {
             const error = ErrorHandle(err as AxiosError);
-            enqueueSnackbar(error.message, { variant: "error" });
+            console.log("Error message to snackbar:", error.message);
+            enqueueSnackbar(error.message || "Đã xảy ra lỗi", { variant: "error" });
+
         }
     };
 
