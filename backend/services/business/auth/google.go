@@ -5,7 +5,7 @@ import (
 	entityAuth "bloghomnay-project/services/entity/auth"
 	entityUser "bloghomnay-project/services/entity/user"
 	"context"
-	"log"
+	"fmt"
 
 	"github.com/google/uuid"
 	"google.golang.org/api/idtoken"
@@ -15,7 +15,7 @@ func (bz *BusinessAuth) LoginWithGoogle(ctx context.Context, input *entityAuth.G
 	// Validate Google ID Token
 	payload, err := idtoken.Validate(ctx, input.Token, bz.cfg.GoogleClientID)
 	if err != nil {
-		log.Printf("Lỗi validate token Google: %v", err)
+		fmt.Printf("Lỗi validate token Google: %v", err)
 		return nil, common.NewAppError(401, "Token Google không hợp lệ", err)
 	}
 
@@ -41,7 +41,7 @@ func (bz *BusinessAuth) LoginWithGoogle(ctx context.Context, input *entityAuth.G
 	// --- Kiểm tra user đã tồn tại hay chưa ---
 	auth, err := bz.bzAuth.GetAuthByEmail(ctx, email)
 	if err != nil || auth == nil {
-		log.Printf("Người dùng chưa tồn tại hoặc auth nil: %v", err)
+		fmt.Printf("Người dùng chưa tồn tại hoặc auth nil: %v", err)
 
 		id, err_id := bz.bzUser.BzCreateUser(ctx, &entityUser.CreateUserForm{
 			Email:     email,
@@ -50,7 +50,7 @@ func (bz *BusinessAuth) LoginWithGoogle(ctx context.Context, input *entityAuth.G
 			Phone:     "0394025628", // TODO: Nếu cần có thể để rỗng
 		})
 		if err_id != nil {
-			log.Printf("Lỗi tạo user mới: %v", err)
+			fmt.Printf("Lỗi tạo user mới: %v", err)
 			return nil, err_id
 		}
 
@@ -59,14 +59,14 @@ func (bz *BusinessAuth) LoginWithGoogle(ctx context.Context, input *entityAuth.G
 			UserId: id,
 		}
 		if err := bz.bzAuth.CreateAuth(ctx, authEntity); err != nil {
-			log.Printf("Lỗi tạo auth record: %v", err)
+			fmt.Printf("Lỗi tạo auth record: %v", err)
 			return nil, common.NewAppError(500, "Không thể tạo auth", err)
 		}
 
 	}
 
 	// --- Tạo token ---
-	log.Printf("UserID dùng để tạo token: %v", auth.UserId)
+	fmt.Printf("UserID dùng để tạo token: %v", auth.UserId)
 
 	s := common.NewUID(uint32(auth.UserId), 1)
 	sub := s.ToBase58()
@@ -76,14 +76,14 @@ func (bz *BusinessAuth) LoginWithGoogle(ctx context.Context, input *entityAuth.G
 	// --- Lấy profile người dùng ---
 	user, err_u := bz.bzUser.BzGetUsersById(ctx, auth.UserId)
 	if err != nil {
-		log.Printf("Lỗi lấy user profile: %v", err)
+		fmt.Printf("Lỗi lấy user profile: %v", err)
 		return nil, err_u
 	}
 	user.Mask()
 
 	// --- Lưu vào Redis (tùy chọn) ---
 	if err := bz.bzRedis.SaveProfile(ctx, user); err != nil {
-		log.Printf("Lỗi lưu profile vào Redis: %v", err)
+		fmt.Printf("Lỗi lưu profile vào Redis: %v", err)
 	}
 
 	return token, nil
