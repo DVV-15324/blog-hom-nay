@@ -117,7 +117,7 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
     const handleOut = async () => {
         setProfile(null)
         localStorage.removeItem("access_token")
-
+        window.location.replace("/");
     }
     return (
         <AuthContext.Provider

@@ -24,17 +24,20 @@ const HeaderMain = ({ children }: HeaderMainProps) => {
     const handleProfileOthers = (e: React.MouseEvent) => {
         e.stopPropagation();
 
-
-        if (!profile) return;
+        if (!profile) {
+            navigate("/login");
+            return; // Dừng lại ở đây nếu không có profile
+        }
 
         const url = ConvertProfileToString({
             first_name: profile.first_name,
             last_name: profile.last_name,
             id: profile.id,
         });
-        console.log("Navigating to:", url);
+
         navigate(`/user/${url}`);
     };
+
 
     if (loading) {
         return (
