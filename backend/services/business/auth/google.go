@@ -44,6 +44,7 @@ func (bz *BusinessAuth) LoginWithGoogle(ctx context.Context, input *entityAuth.G
 		}
 
 		authEntity.UserId = id
+		auth = authEntity
 	}
 
 	// Tạo token
