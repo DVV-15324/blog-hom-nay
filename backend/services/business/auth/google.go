@@ -13,53 +13,78 @@ import (
 
 func (bz *BusinessAuth) LoginWithGoogle(ctx context.Context, input *entityAuth.GoogleLoginForm) (*common.TokenResponse, *common.AppError) {
 	// Validate Google ID Token
-	payload, err := idtoken.Validate(ctx, input.Token, bz.cfg.GoogleClientID) // bz.cfg.GoogleClientID = client ID của bạn
+	payload, err := idtoken.Validate(ctx, input.Token, bz.cfg.GoogleClientID)
 	if err != nil {
+		log.Printf("Lỗi validate token Google: %v", err)
 		return nil, common.NewAppError(401, "Token Google không hợp lệ", err)
 	}
 
-	email := payload.Claims["email"].(string)
-	name := payload.Claims["name"].(string)
+	// --- Bắt lỗi claim không tồn tại hoặc không đúng định dạng ---
+	emailClaim, ok := payload.Claims["email"]
+	if !ok {
+		return nil, common.NewAppError(400, "Không tìm thấy email trong token", nil)
+	}
+	email, ok := emailClaim.(string)
+	if !ok {
+		return nil, common.NewAppError(400, "Email không hợp lệ", nil)
+	}
 
-	// Kiểm tra người dùng đã tồn tại chưa
+	nameClaim, ok := payload.Claims["name"]
+	if !ok {
+		return nil, common.NewAppError(400, "Không tìm thấy name trong token", nil)
+	}
+	name, ok := nameClaim.(string)
+	if !ok {
+		return nil, common.NewAppError(400, "Tên không hợp lệ", nil)
+	}
+
+	// --- Kiểm tra user đã tồn tại hay chưa ---
 	auth, err := bz.bzAuth.GetAuthByEmail(ctx, email)
 	if err != nil {
+		log.Printf("User chưa tồn tại, tạo mới: %v", err)
+
 		authEntity := &entityAuth.Auth{
 			Email: email,
 		}
-		id, err := bz.bzUser.BzCreateUser(ctx, &entityUser.CreateUserForm{
+
+		id, err_id := bz.bzUser.BzCreateUser(ctx, &entityUser.CreateUserForm{
 			Email:     email,
 			FirstName: name,
 			LastName:  name,
-			Phone:     "0394025628",
+			Phone:     "0394025628", // TODO: Nếu cần có thể để rỗng
 		})
-		if err != nil {
-			return nil, err
+		if err_id != nil {
+			log.Printf("Lỗi tạo user mới: %v", err)
+			return nil, err_id
 		}
 
 		authEntity.UserId = id
+
 		if err := bz.bzAuth.CreateAuth(ctx, authEntity); err != nil {
+			log.Printf("Lỗi tạo auth record: %v", err)
 			return nil, common.NewAppError(500, "Không thể tạo auth", err)
 		}
 
-		// ✅ Bổ sung dòng này:
 		auth = authEntity
 	}
 
-	// Tạo token
+	// --- Tạo token ---
+	log.Printf("UserID dùng để tạo token: %v", auth.UserId)
+
 	s := common.NewUID(uint32(auth.UserId), 1)
 	sub := s.ToBase58()
 	tid := uuid.New().String()
 	token := bz.jwt.IssueToken(ctx, sub, tid)
 
-	// Trả profile + token
-	user, err_us := bz.bzUser.BzGetUsersById(ctx, auth.UserId)
+	// --- Lấy profile người dùng ---
+	user, err_u := bz.bzUser.BzGetUsersById(ctx, auth.UserId)
 	if err != nil {
-		return nil, err_us
+		log.Printf("Lỗi lấy user profile: %v", err)
+		return nil, err_u
 	}
 	user.Mask()
 
-	// Lưu vào Redis nếu có
+	// --- Lưu vào Redis (tùy chọn) ---
 	if err := bz.bzRedis.SaveProfile(ctx, user); err != nil {
 		log.Printf("Lỗi lưu profile vào Redis: %v", err)
 	}
