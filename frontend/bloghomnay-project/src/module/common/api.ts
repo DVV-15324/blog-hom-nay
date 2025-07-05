@@ -3,7 +3,7 @@ import axios from "axios"
 
 //https://bloghomnay.com/api
 export const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://bloghomnay.com/api',
 })
 
 
