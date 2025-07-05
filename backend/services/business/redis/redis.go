@@ -4,7 +4,6 @@ import (
 	entityUser "bloghomnay-project/services/entity/user"
 	"context"
 	"encoding/json"
-	"log"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -27,13 +26,19 @@ func (bz *BusinessRedis) SaveProfile(ctx context.Context, data *entityUser.Users
 
 	key := "profile:" + data.FakeId
 
-	log.Println("Đang lưu profile vào Redis với key:", key)
-	log.Println("Dữ liệu JSON:", string(jsonData))
-
 	return bz.redisC.Set(ctx, key, jsonData, 0).Err()
 }
 
-// GetProfile lấy dữ liệu JSON từ Redis theo key "profile:<userID>"
-func (bz *BusinessRedis) GetProfile(ctx context.Context, userID string) (string, error) {
-	return bz.redisC.Get(ctx, "profile:"+userID).Result()
+// GetProfileEntity trả về struct Users từ Redis
+func (bz *BusinessRedis) GetProfileEntity(ctx context.Context, userID string) (*entityUser.Users, error) {
+	dataStr, err := bz.redisC.Get(ctx, "profile:"+userID).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	var user entityUser.Users
+	if err := json.Unmarshal([]byte(dataStr), &user); err != nil {
+		return nil, err
+	}
+	return &user, nil
 }

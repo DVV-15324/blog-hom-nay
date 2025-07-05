@@ -132,8 +132,8 @@ func ComposerService() *ApiServer {
 	// business
 	jwt := common.NewJwtServer("vu-dep-trai-nhat-the-gioi", 604800)
 	hash := new(common.Hash)
-	bzUser := bzUser.NewBusinessUser(rUser)
 	bzRedis := bzRedis.NewBusinessRedis(redisClient)
+	bzUser := bzUser.NewBusinessUser(rUser, bzRedis)
 	bzAuth := bzAuth.NewBusinessAuth(jwt, bzUser, hash, rAuth, bzRedis)
 	bzTag := bzTag.NewBusinessTag(rTag, rPostTag)
 	bzPostLike := bzPostLike.NewBusinessPostLike(rPostLike)

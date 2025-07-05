@@ -40,7 +40,7 @@ func (bz *BusinessAuth) LoginAuth(ctx context.Context, au *entityAuth.LoginForm)
 	if err_u != nil {
 		return nil, err_u
 	}
-
+	user.Mask()
 	if err := bz.bzRedis.SaveProfile(ctx, user); err != nil {
 		log.Printf("Lỗi lưu profile vào Redis: %v", err)
 	}

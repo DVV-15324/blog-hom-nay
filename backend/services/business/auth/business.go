@@ -9,7 +9,7 @@ import (
 
 type BzRedis interface {
 	SaveProfile(ctx context.Context, data *entityUser.Users) error
-	GetProfile(ctx context.Context, userID string) (string, error)
+	GetProfileEntity(ctx context.Context, userID string) (*entityUser.Users, error)
 }
 
 type ReponsitoryAuth interface {
