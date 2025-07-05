@@ -9,6 +9,7 @@ import (
 type BusinessAuth interface {
 	LoginAuth(ctx context.Context, au *entityAuth.LoginForm) (*common.TokenResponse, *common.AppError)
 	BzRegisterAuth(ctx context.Context, auth *entityAuth.RegisterForm) *common.AppError
+	LoginWithGoogle(ctx context.Context, input *entityAuth.GoogleLoginForm) (*common.TokenResponse, *common.AppError)
 }
 type ApiAuth struct {
 	bz BusinessAuth

@@ -38,14 +38,16 @@ type BusinessAuth struct {
 	hash    Hash
 	bzAuth  ReponsitoryAuth
 	bzRedis BzRedis
+	cfg     *entityAuth.Config
 }
 
-func NewBusinessAuth(jwt JwtService, bzUser BzUser, h Hash, bzAuth ReponsitoryAuth, bzRedis BzRedis) *BusinessAuth {
+func NewBusinessAuth(jwt JwtService, bzUser BzUser, h Hash, bzAuth ReponsitoryAuth, bzRedis BzRedis, cfg *entityAuth.Config) *BusinessAuth {
 	return &BusinessAuth{
 		jwt:     jwt,
 		bzUser:  bzUser,
 		hash:    h,
 		bzAuth:  bzAuth,
 		bzRedis: bzRedis,
+		cfg:     cfg,
 	}
 }

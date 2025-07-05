@@ -2,6 +2,7 @@
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useHookAuth } from "../hooks/authHooks";
+import GoogleLoginButton from "./GoogleLoginButton"; // sửa path nếu khác
 
 import { LoginSchema } from "../model/schema";
 
@@ -58,7 +59,9 @@ export function LoginUI() {
             <button type="submit" className="bg-red-900 text-white px-1 py-1 xl:px-4 xl:py-2 rounded w-full">
                 Login
             </button>
-
+            <div className="mt-4">
+                <GoogleLoginButton />
+            </div>
             <h1 className="mt-4 text-center">
                 Chưa có tài khoản?{" "}
                 <a href="/register" className="text-blue-600 underline">

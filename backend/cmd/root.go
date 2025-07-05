@@ -37,6 +37,7 @@ func StartService(r *gin.Engine) {
 	//auth
 	auth := v1.Group("auth")
 	auth.POST("/login", comp.ApiAuth.ApiLoginAuth())
+	auth.POST("/google", comp.ApiAuth.ApiGoogleLogin())
 	auth.POST("/register", comp.ApiAuth.ApiRegisterAuth())
 
 	v2 := r.Group("v2")

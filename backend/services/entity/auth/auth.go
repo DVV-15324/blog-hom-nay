@@ -26,3 +26,12 @@ type Auth struct {
 func TableName() string {
 	return "auths"
 }
+
+type GoogleLoginForm struct {
+	Token string `json:"token"` // Trường JSON tên "token"
+}
+type Config struct {
+	GoogleClientID string
+	JwtSecret      string
+	// các cấu hình khác
+}

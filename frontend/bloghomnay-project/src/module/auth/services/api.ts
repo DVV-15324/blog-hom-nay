@@ -23,3 +23,9 @@ export const ApiProfileP = async <T>(id: string): Promise<T> => {
     return response.data
 }
 
+export const ApiLoginGoogle = async <T>(token: string): Promise<T> => {
+    const response: AxiosResponse<T> = await axiosInstance.post(`/v1/auth/google`, {
+        token: token,
+    });
+    return response.data;
+}

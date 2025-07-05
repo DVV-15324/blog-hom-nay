@@ -4,7 +4,7 @@ import { useNavigate, ErrorResponse } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import axios, { AxiosError } from "axios";
 import CircularProgress from '@mui/material/CircularProgress';
-import { ApiLogin, ApiProfile, ApiRegister } from "../services/api";
+import { ApiLogin, ApiLoginGoogle, ApiProfile, ApiRegister } from "../services/api";
 import { Response } from "../../common/model";
 
 const ErrorHandle = (error: AxiosError | Error) => {
@@ -26,7 +26,7 @@ type AuthContextType = {
     handleLogin: (data: LoginType) => Promise<void>
     handleRegister: (data: RegisterType) => Promise<void>
     handleProfile: () => Promise<void>
-
+    handleCredentialResponse: (response: any) => Promise<void>;
     handleOut: () => void
 }
 
@@ -36,7 +36,7 @@ export const AuthContext = createContext<AuthContextType>({
     handleLogin: async () => { },
     handleRegister: async () => { },
     handleProfile: async () => { },
-
+    handleCredentialResponse: async () => { },
     handleOut: () => { },
 })
 
@@ -119,6 +119,24 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
         localStorage.removeItem("access_token")
         window.location.replace("/");
     }
+
+
+    const handleCredentialResponse = async (response: any) => {
+        try {
+            const res = await ApiLoginGoogle<Response<ResponseLoginType>>(response.credential);
+
+            localStorage.setItem("access_token", res.data.access_token.token);
+            enqueueSnackbar("Đăng nhập bằng Google thành công!", { variant: "success" });
+
+            await handleProfile();
+            navigate("/");
+        } catch (err) {
+            const error = ErrorHandle(err as AxiosError);
+            enqueueSnackbar(error.message, { variant: "error" });
+        }
+    };
+
+
     return (
         <AuthContext.Provider
             value={{
@@ -127,7 +145,7 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
                 handleLogin,
                 handleRegister,
                 handleProfile,
-
+                handleCredentialResponse,
                 handleOut,
             }}
         >

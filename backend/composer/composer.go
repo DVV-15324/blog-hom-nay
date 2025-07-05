@@ -12,6 +12,7 @@ import (
 	bzRedis "bloghomnay-project/services/business/redis"
 	bzTag "bloghomnay-project/services/business/tag"
 	bzUser "bloghomnay-project/services/business/user"
+	entityAuth "bloghomnay-project/services/entity/auth"
 	responsitoryAuth "bloghomnay-project/services/reponsitory/auth"
 	responsitoryCategories "bloghomnay-project/services/reponsitory/categories"
 	responsitoryComment "bloghomnay-project/services/reponsitory/comment"
@@ -48,6 +49,7 @@ type BzIntroSpectToken interface {
 type ApiAuth interface {
 	ApiLoginAuth() func(c *gin.Context)
 	ApiRegisterAuth() func(c *gin.Context)
+	ApiGoogleLogin() func(c *gin.Context)
 }
 type ApiUser interface {
 	ApiDeleteUser() func(c *gin.Context)
@@ -117,9 +119,14 @@ func ComposerService() *ApiServer {
 	if err != nil {
 		log.Println("Warning: Error loading .env file, using default or env vars")
 	}
-
+	cfg := &entityAuth.Config{
+		GoogleClientID: os.Getenv("GOOGLE_CLIENT_ID"),
+	}
 	host := os.Getenv("DB_HOST")
+	//redis
 	redisClient := InitRedis(fmt.Sprintf("%s:6379", host), "", 0)
+	//google
+
 	//repon
 	rAuth := responsitoryAuth.NewAuthServiceSQL(db)
 	rUser := responsitoryUser.NewUserServiceSQL(db)
@@ -135,7 +142,7 @@ func ComposerService() *ApiServer {
 	hash := new(common.Hash)
 	bzRedis := bzRedis.NewBusinessRedis(redisClient)
 	bzUser := bzUser.NewBusinessUser(rUser, bzRedis)
-	bzAuth := bzAuth.NewBusinessAuth(jwt, bzUser, hash, rAuth, bzRedis)
+	bzAuth := bzAuth.NewBusinessAuth(jwt, bzUser, hash, rAuth, bzRedis, cfg)
 	bzTag := bzTag.NewBusinessTag(rTag, rPostTag)
 	bzPostLike := bzPostLike.NewBusinessPostLike(rPostLike)
 	bzCategories := bzCategories.NewBusinessCategories(rCategories)
